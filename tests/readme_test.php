@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class readme_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_readmetest',
@@ -59,7 +58,7 @@ final class readme_test extends \advanced_testcase {
      */
     public function test_readme(): void {
         $logger = new Logger('demo');
-        $logger->pushHandler(new NullHandler);
+        $logger->pushHandler(new NullHandler());
         $manager = manager::instance($logger);
 
         $recipe = self::$recipe;

@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class mobile_addons_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_mobileaddonstest',
@@ -86,15 +85,15 @@ final class mobile_addons_test extends \advanced_testcase {
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $dbmobilefile);
 
-        $addon = "'".$recipe['mobile_addons'][0]['name']."' => [";
+        $addon = "'" . $recipe['mobile_addons'][0]['name'] . "' => [";
         $this->assertStringContainsString($addon, $dbmobilefile);
 
         $dependencieslist = $recipe['mobile_addons'][0]['dependencies'];
         foreach ($dependencieslist as $dependency) {
-            $this->assertStringContainsString("'".$dependency['name']."'", $dbmobilefile);
+            $this->assertStringContainsString("'" . $dependency['name'] . "'", $dbmobilefile);
         }
 
-        $addon = "'".$recipe['mobile_addons'][1]['name']."' => [";
+        $addon = "'" . $recipe['mobile_addons'][1]['name'] . "' => [";
         $this->assertStringContainsString($addon, $dbmobilefile);
     }
 }

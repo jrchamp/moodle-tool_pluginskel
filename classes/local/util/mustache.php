@@ -36,7 +36,6 @@ use Mustache_Loader_FilesystemLoader;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mustache {
-
     /** @var Mustache_Engine */
     protected $engine = null;
 
@@ -47,7 +46,7 @@ class mustache {
      */
     public function __construct(array $options = []) {
         global $CFG;
-        require_once($CFG->dirroot.'/lib/mustache/src/Mustache/Autoloader.php');
+        require_once($CFG->dirroot . '/lib/mustache/src/Mustache/Autoloader.php');
 
         Mustache_Autoloader::register();
 
@@ -58,7 +57,7 @@ class mustache {
         ];
 
         if (empty($options['loader'])) {
-            $default['loader'] = new Mustache_Loader_FilesystemLoader($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/skel');
+            $default['loader'] = new Mustache_Loader_FilesystemLoader($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/skel');
             unset($options['loader']);
         }
 

@@ -32,7 +32,6 @@ namespace tool_pluginskel\local\skel;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class privacy_provider_file extends php_single_file {
-
     /**
      * Set additional data to be available to the template.
      *
@@ -44,7 +43,7 @@ class privacy_provider_file extends php_single_file {
 
         if (empty($data['privacy']['haspersonaldata'])) {
             $this->data['privacy']['_implementedinterfaces'] = ' \core_privacy\local\metadata\null_provider';
-            $this->manager->add_lang_string('privacy:metadata', $data['name'].' does not store any personal data');
+            $this->manager->add_lang_string('privacy:metadata', $data['name'] . ' does not store any personal data');
             return;
         }
 
@@ -71,11 +70,11 @@ class privacy_provider_file extends php_single_file {
             $implementedinterfaces[] = '\core_privacy\local\request\user_preference_provider';
         }
 
-        array_walk($implementedinterfaces, function(&$line) {
-            $line = str_repeat(' ', 4).$line;
+        array_walk($implementedinterfaces, function (&$line) {
+            $line = str_repeat(' ', 4) . $line;
         });
 
-        $implementedinterfaces[0] = "\n".$implementedinterfaces[0];
+        $implementedinterfaces[0] = "\n" . $implementedinterfaces[0];
 
         $this->data['privacy']['_implementedinterfaces'] = implode(",\n", $implementedinterfaces);
     }
@@ -92,21 +91,21 @@ class privacy_provider_file extends php_single_file {
 
             foreach ($data['privacy']['meta']['dbfields'] as $dbtable => $dbfields) {
                 // Convert the full table name to a string id, e.g. 'local_foo_bar' -> 'foobar'.
-                $tabletostring = str_replace('_', '', preg_replace('/^'.$data['component'].'_/', '', $dbtable));
+                $tabletostring = str_replace('_', '', preg_replace('/^' . $data['component'] . '_/', '', $dbtable));
                 $add = [
                     'name' => $dbtable,
-                    'stringid' => 'privacy:metadata:db:'.$tabletostring,
+                    'stringid' => 'privacy:metadata:db:' . $tabletostring,
                     'fields' => [],
                 ];
-                $this->manager->add_lang_string($add['stringid'], 'Describe table '.$dbtable.' here.');
+                $this->manager->add_lang_string($add['stringid'], 'Describe table ' . $dbtable . ' here.');
 
                 foreach ($dbfields as $dbfield) {
-                    $stringid = 'privacy:metadata:db:'.$tabletostring.':'.$dbfield;
+                    $stringid = 'privacy:metadata:db:' . $tabletostring . ':' . $dbfield;
                     $add['fields'][] = [
                         'name' => $dbfield,
                         'stringid' => $stringid,
                     ];
-                    $this->manager->add_lang_string($stringid, 'Describe field '.$dbfield.' here.');
+                    $this->manager->add_lang_string($stringid, 'Describe field ' . $dbfield . ' here.');
                 }
 
                 $this->data['privacy']['_metadbfields'][] = $add;
@@ -135,28 +134,31 @@ class privacy_provider_file extends php_single_file {
                 [$type, $name] = \core_component::normalize_component($subsystem);
 
                 if ($type !== 'core') {
-                    throw new \coding_exception('Unknown core subsystem: '.$input);
+                    throw new \coding_exception('Unknown core subsystem: ' . $input);
                 }
 
                 $add = [
                     'name' => $name,
-                    'stringid' => 'privacy:metadata:subsystem:'.$name,
+                    'stringid' => 'privacy:metadata:subsystem:' . $name,
                     'fields' => [],
                 ];
 
                 if ($fields) {
                     $add['hasfields'] = true;
                     foreach ($fields as $field) {
-                        $stringid = 'privacy:metadata:subsystem:'.$name.':'.$field;
+                        $stringid = 'privacy:metadata:subsystem:' . $name . ':' . $field;
                         $add['fields'][] = [
                             'name' => $field,
                             'stringid' => $stringid,
                         ];
-                        $this->manager->add_lang_string($stringid, 'Describe field '.$field.' here.');
+                        $this->manager->add_lang_string($stringid, 'Describe field ' . $field . ' here.');
                     }
                 }
 
-                $this->manager->add_lang_string($add['stringid'], 'Describe how the '.$name.' subsystem is used by the plugin.');
+                $this->manager->add_lang_string(
+                    $add['stringid'],
+                    'Describe how the ' . $name . ' subsystem is used by the plugin.'
+                );
 
                 $this->data['privacy']['_metasubsystems'][] = $add;
             }
@@ -176,20 +178,20 @@ class privacy_provider_file extends php_single_file {
             foreach ($this->normalize_names_and_fields($data['privacy']['meta']['external']) as $system => $fields) {
                 $add = [
                     'name' => $system,
-                    'stringid' => 'privacy:metadata:external:'.$system,
+                    'stringid' => 'privacy:metadata:external:' . $system,
                     'fields' => [],
                 ];
-                $this->manager->add_lang_string($add['stringid'], 'Describe external system '.$system.' here.');
+                $this->manager->add_lang_string($add['stringid'], 'Describe external system ' . $system . ' here.');
 
                 if ($fields) {
                     $add['hasfields'] = true;
                     foreach ($fields as $field) {
-                        $stringid = 'privacy:metadata:external:'.$system.':'.$field;
+                        $stringid = 'privacy:metadata:external:' . $system . ':' . $field;
                         $add['fields'][] = [
                             'name' => $field,
                             'stringid' => $stringid,
                         ];
-                        $this->manager->add_lang_string($stringid, 'Describe field '.$field.' here.');
+                        $this->manager->add_lang_string($stringid, 'Describe field ' . $field . ' here.');
                     }
                 }
 
@@ -210,8 +212,8 @@ class privacy_provider_file extends php_single_file {
 
             foreach ($data['privacy']['meta']['userpreferences'] as $prefname) {
                 // If the prefname starts with the component name, drop the prefix.
-                $prefnamewoprefix = str_replace('_', '', preg_replace('/^'.$data['component'].'_/', '', $prefname));
-                $stringid = 'privacy:metadata:preference:'.$prefnamewoprefix;
+                $prefnamewoprefix = str_replace('_', '', preg_replace('/^' . $data['component'] . '_/', '', $prefname));
+                $stringid = 'privacy:metadata:preference:' . $prefnamewoprefix;
 
                 $this->data['privacy']['_metauserpreferences'][] = [
                     'name' => $prefname,
@@ -219,7 +221,7 @@ class privacy_provider_file extends php_single_file {
                     'stringid' => $stringid,
                 ];
 
-                $this->manager->add_lang_string($stringid, 'Describe user preference '.$prefname.' here.');
+                $this->manager->add_lang_string($stringid, 'Describe user preference ' . $prefname . ' here.');
             }
         }
 
@@ -257,7 +259,6 @@ class privacy_provider_file extends php_single_file {
                 foreach ($item as $name => $fields) {
                     $output[$name] = $fields;
                 }
-
             } else {
                 $output[$item] = [];
             }

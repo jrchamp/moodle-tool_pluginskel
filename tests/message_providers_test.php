@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class message_providers_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_messageproviderstest',
@@ -83,16 +82,16 @@ final class message_providers_test extends \advanced_testcase {
 
         // Verify if the message provider has been generated correctly.
         $messageprovider = $recipe['message_providers'][0]['name'];
-        $this->assertStringContainsString("'".$messageprovider."' => [", $messagesfile);
+        $this->assertStringContainsString("'" . $messageprovider . "' => [", $messagesfile);
 
         $capability = $recipe['message_providers'][0]['capability'];
-        $this->assertStringContainsString("'capability' => '".$capability."'", $messagesfile);
+        $this->assertStringContainsString("'capability' => '" . $capability . "'", $messagesfile);
 
         // Verify if the title string has been generated.
-        $this->assertArrayHasKey('lang/en/'.$recipe['component'].'.php', $files);
-        $langfile = $files['lang/en/'.$recipe['component'].'.php'];
+        $this->assertArrayHasKey('lang/en/' . $recipe['component'] . '.php', $files);
+        $langfile = $files['lang/en/' . $recipe['component'] . '.php'];
 
-        $langstring = "\$string['messageprovider:".$messageprovider."'] = '".$recipe['message_providers'][0]['title']."';";
+        $langstring = "\$string['messageprovider:" . $messageprovider . "'] = '" . $recipe['message_providers'][0]['title'] . "';";
         $this->assertStringContainsString($langstring, $langfile);
     }
 }

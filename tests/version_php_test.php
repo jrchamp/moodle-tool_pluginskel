@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class version_php_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_versionphptest',
@@ -83,14 +82,14 @@ final class version_php_test extends \advanced_testcase {
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $versionfile);
 
-        list($type, $name) = \core_component::normalize_component($recipe['component']);
-        $fullcomponent = $type.'_'.$name;
-        $this->assertStringContainsString("\$plugin->component = '".$fullcomponent."'", $versionfile);
+        [$type, $name] = \core_component::normalize_component($recipe['component']);
+        $fullcomponent = $type . '_' . $name;
+        $this->assertStringContainsString("\$plugin->component = '" . $fullcomponent . "'", $versionfile);
 
-        $this->assertStringContainsString("\$plugin->release = '".$recipe['release']."'", $versionfile);
-        $this->assertStringContainsString("\$plugin->version = ".$recipe['version'], $versionfile);
-        $this->assertStringContainsString("\$plugin->requires = ".$recipe['requires'], $versionfile);
-        $this->assertStringContainsString("\$plugin->maturity = ".$recipe['maturity'], $versionfile);
+        $this->assertStringContainsString("\$plugin->release = '" . $recipe['release'] . "'", $versionfile);
+        $this->assertStringContainsString("\$plugin->version = " . $recipe['version'], $versionfile);
+        $this->assertStringContainsString("\$plugin->requires = " . $recipe['requires'], $versionfile);
+        $this->assertStringContainsString("\$plugin->maturity = " . $recipe['maturity'], $versionfile);
         $this->assertStringContainsString('$plugin->dependencies', $versionfile);
 
         $plugin = $recipe['dependencies'][0]['plugin'];

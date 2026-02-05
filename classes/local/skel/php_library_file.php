@@ -27,7 +27,6 @@ namespace tool_pluginskel\local\skel;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class php_library_file extends php_internal_file {
-
     /**
      * Set the data to be eventually rendered.
      *

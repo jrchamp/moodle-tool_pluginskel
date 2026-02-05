@@ -44,7 +44,6 @@ require_once(__DIR__ . '/../locallib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class auth_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'auth_test',
@@ -81,14 +80,14 @@ final class auth_test extends \advanced_testcase {
         $this->assertArrayHasKey('auth.php', $files);
         $authfile = $files['auth.php'];
 
-        list($type, $authname) = \core_component::normalize_component($recipe['component']);
-        $description = 'Authentication class for '.$authname.' is defined here.';
+        [$type, $authname] = \core_component::normalize_component($recipe['component']);
+        $description = 'Authentication class for ' . $authname . ' is defined here.';
         $this->assertStringContainsString($description, $authfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $authfile);
 
-        $classdefinition = 'class auth_plugin_'.$authname.' extends auth_plugin_base';
+        $classdefinition = 'class auth_plugin_' . $authname . ' extends auth_plugin_base';
         $this->assertStringContainsString($classdefinition, $authfile);
 
         $userlogin = 'public function user_login($username, $password)';
@@ -106,9 +105,9 @@ final class auth_test extends \advanced_testcase {
         ];
 
         foreach ($recipefeatures as $functionname) {
-            $function = '/public function '.$functionname.'\(\) {';
+            $function = '/public function ' . $functionname . '\(\) {';
             $returnvalue = $recipe['auth_features'][$functionname] == true ? 'true' : 'false';
-            $function .= '\s+return '.$returnvalue.';/';
+            $function .= '\s+return ' . $returnvalue . ';/';
             $this->assertMatchesRegularExpression($function, $authfile);
         }
 
@@ -136,10 +135,10 @@ final class auth_test extends \advanced_testcase {
 
         $files = $manager->get_files_content();
 
-        $this->assertArrayHasKey('lang/en/'.$recipe['component'].'.php', $files);
-        $langfile = $files['lang/en/'.$recipe['component'].'.php'];
+        $this->assertArrayHasKey('lang/en/' . $recipe['component'] . '.php', $files);
+        $langfile = $files['lang/en/' . $recipe['component'] . '.php'];
 
-        $descriptionstring = "\$string['auth_description'] = '".$recipe['auth_features']['description']."';";
+        $descriptionstring = "\$string['auth_description'] = '" . $recipe['auth_features']['description'] . "';";
         $this->assertStringContainsString($descriptionstring, $langfile);
     }
 }

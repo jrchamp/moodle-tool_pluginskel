@@ -32,7 +32,7 @@ use tool_pluginskel\local\util\manager;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/vendor/autoload.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autoload.php');
 
 /**
  * Test case for generating the classes/privacy/provider.php file.
@@ -42,7 +42,6 @@ require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/vendor/autoload.php
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class privacy_test extends \advanced_testcase {
-
     /**
      * Returns a new instance of the manager utility class suitable for testing.
      *
@@ -164,7 +163,7 @@ final class privacy_test extends \advanced_testcase {
         $manager->load_recipe($recipe);
 
         $this->expectException(\coding_exception::class);
-        $this->expectExceptionMessage('Unknown core subsystem: '.$input);
+        $this->expectExceptionMessage('Unknown core subsystem: ' . $input);
         $manager->make();
     }
 
@@ -263,7 +262,9 @@ final class privacy_test extends \advanced_testcase {
         $this->assertStringContainsString("\$collection->add_external_location_link('mahara', [", $providerphp);
         $this->assertStringContainsString("'firstname' => 'privacy:metadata:external:mahara:firstname',", $providerphp);
         $this->assertStringContainsString(
-            "\$collection->add_external_location_link('systemasval', [], 'privacy:metadata:external:systemasval');", $providerphp);
+            "\$collection->add_external_location_link('systemasval', [], 'privacy:metadata:external:systemasval');",
+            $providerphp
+        );
 
         $langfile = $files['lang/en/local_foobar.php'];
 
@@ -376,7 +377,8 @@ final class privacy_test extends \advanced_testcase {
         );
         $this->assertStringContainsString(
             "\$collection->add_user_preference('local_foobar_another', 'privacy:metadata:preference:another');",
-            $providerphp);
+            $providerphp
+        );
         $this->assertStringContainsString('public static function export_user_preferences(int $userid) {', $providerphp);
         $this->assertStringContainsString("\$first = get_user_preferences('first', null, \$userid);", $providerphp);
         $this->assertStringContainsString("writer::export_user_preference('local_foobar', 'first', \$first,", $providerphp);

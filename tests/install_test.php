@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class install_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_installtest',
@@ -72,7 +71,7 @@ final class install_test extends \advanced_testcase {
 
         $description = 'Code to be executed after the plugin\'s database scheme has been installed is defined here.';
         $this->assertStringContainsString($description, $installfile);
-        $this->assertStringContainsString('function xmldb_'.$recipe['component'].'_install()', $installfile);
+        $this->assertStringContainsString('function xmldb_' . $recipe['component'] . '_install()', $installfile);
     }
 
     /**

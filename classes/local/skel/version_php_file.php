@@ -34,7 +34,6 @@ use tool_pluginskel\local\util\exception;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class version_php_file extends php_internal_file {
-
     /** @var string[] Moodle versions - see https://moodledev.io/general/releases */
     protected static $moodleversions = [
         '2025100601' => '5.1',
@@ -74,10 +73,10 @@ class version_php_file extends php_internal_file {
         parent::set_data($data);
 
         if (empty($this->data['version'])) {
-            $this->data['version'] = date('Ymd').'00';
+            $this->data['version'] = date('Ymd') . '00';
         } else {
             if (!preg_match('/^2[0-9]{3}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])[0-9]{2}$/', $this->data['version'])) {
-                throw new exception('Invalid version number: '.$this->data['version']);
+                throw new exception('Invalid version number: ' . $this->data['version']);
             }
         }
 
@@ -89,7 +88,7 @@ class version_php_file extends php_internal_file {
             if (!preg_match('/^2[0-9]{3}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])[0-9]{2}$/', $this->data['requires'])) {
                 $moodleversion = array_search($this->data['requires'], self::$moodleversions);
                 if ($moodleversion === false) {
-                    throw new exception('Unknown required Moodle version: '.$this->data['requires']);
+                    throw new exception('Unknown required Moodle version: ' . $this->data['requires']);
                 } else {
                     $this->data['requires'] = $moodleversion;
                 }
@@ -108,11 +107,13 @@ class version_php_file extends php_internal_file {
         $templatevars = [
             ['name' => 'component', 'type' => 'text', 'required' => true],
             ['name' => 'release', 'type' => 'text', 'default' => '0.1.0'],
-            ['name' => 'version', 'type' => 'int', 'default' => date('Ymd').'00'],
+            ['name' => 'version', 'type' => 'int', 'default' => date('Ymd') . '00'],
             ['name' => 'requires', 'type' => 'multiple-options', 'required' => true, 'values' => self::$moodleversions],
             ['name' => 'dependencies', 'type' => 'numeric-array', 'values' => [
-                  ['name' => 'plugin', 'type' => 'text'],
-                  ['name' => 'version', 'type' => 'text']]],
+                ['name' => 'plugin', 'type' => 'text'],
+                ['name' => 'version', 'type' => 'text'],
+            ],
+            ],
         ];
 
         $maturities = [

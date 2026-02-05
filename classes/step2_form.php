@@ -35,7 +35,6 @@ require_once($CFG->libdir . '/formslib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool_pluginskel_step2_form extends moodleform {
-
     /**
      * The standard form definiton.
      */
@@ -48,8 +47,12 @@ class tool_pluginskel_step2_form extends moodleform {
         $mform->addElement('header', 'showrecipehdr', get_string('showrecipehdr', 'tool_pluginskel'));
         $mform->setExpanded('showrecipehdr', true);
 
-        $mform->addElement('textarea', 'recipe', get_string('recipe', 'tool_pluginskel'),
-                           ['wrap' => 'virtual',  'rows' => '25', 'cols' => '60']);
+        $mform->addElement(
+            'textarea',
+            'recipe',
+            get_string('recipe', 'tool_pluginskel'),
+            ['wrap' => 'virtual', 'rows' => '25', 'cols' => '60']
+        );
         if (!empty($recipe)) {
             $mform->getElement('recipe')->setValue($recipestring);
         }

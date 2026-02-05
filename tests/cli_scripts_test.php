@@ -42,7 +42,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class cli_scripts_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component'     => 'local_cliscriptstest',
@@ -67,12 +66,12 @@ final class cli_scripts_test extends \advanced_testcase {
         $manager->make();
 
         $files = $manager->get_files_content();
-        $filename = 'cli/'.$recipe['cli_scripts'][0]['filename'].'.php';
+        $filename = 'cli/' . $recipe['cli_scripts'][0]['filename'] . '.php';
         $this->assertArrayHasKey($filename, $files);
 
         $clifile = $files[$filename];
 
-        $description = 'CLI script for '.$recipe['component'].'.';
+        $description = 'CLI script for ' . $recipe['component'] . '.';
         $this->assertStringContainsString($description, $clifile);
 
         $cliscript = "define('CLI_SCRIPT', true)";
@@ -84,7 +83,7 @@ final class cli_scripts_test extends \advanced_testcase {
         $clilib = "require_once(\$CFG->libdir . '/clilib.php')";
         $this->assertStringContainsString($clilib, $clifile);
 
-        $filename = 'cli/'.$recipe['cli_scripts'][1]['filename'].'.php';
+        $filename = 'cli/' . $recipe['cli_scripts'][1]['filename'] . '.php';
         $this->assertArrayHasKey($filename, $files);
     }
 }

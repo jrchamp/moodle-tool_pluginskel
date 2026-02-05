@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class upgrade_test extends \advanced_testcase {
-
     /** @var string[] The test recipe for a local plugin type. */
     protected static $recipelocal = [
         'component' => 'local_upgradetest',
@@ -71,7 +70,7 @@ final class upgrade_test extends \advanced_testcase {
      */
     public function test_local_db_upgrade_php(): void {
         $logger = new Logger('upgradetest');
-        $logger->pushHandler(new NullHandler);
+        $logger->pushHandler(new NullHandler());
         $manager = manager::instance($logger);
 
         $recipe = self::$recipelocal;
@@ -93,7 +92,7 @@ final class upgrade_test extends \advanced_testcase {
      */
     public function test_mod_db_upgrade_php(): void {
         $logger = new Logger('upgradetest');
-        $logger->pushHandler(new NullHandler);
+        $logger->pushHandler(new NullHandler());
         $manager = manager::instance($logger);
 
         $recipe = self::$recipemod;
@@ -115,7 +114,7 @@ final class upgrade_test extends \advanced_testcase {
      */
     public function test_db_upgradelib_php(): void {
         $logger = new Logger('upgradetest');
-        $logger->pushHandler(new NullHandler);
+        $logger->pushHandler(new NullHandler());
         $manager = manager::instance($logger);
 
         $recipe = self::$recipelocal;
@@ -137,6 +136,6 @@ final class upgrade_test extends \advanced_testcase {
 
         $description = 'Plugin upgrade helper functions are defined here.';
         $this->assertStringContainsString($description, $upgradelibfile);
-        $this->assertStringContainsString($recipe['component'].'_helper_function()', $upgradelibfile);
+        $this->assertStringContainsString($recipe['component'] . '_helper_function()', $upgradelibfile);
     }
 }

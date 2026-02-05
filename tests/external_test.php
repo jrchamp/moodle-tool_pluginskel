@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class external_test extends \advanced_testcase {
-
     /**
      * Returns a new instance of the manager utility class suitable for testing.
      *
@@ -197,11 +196,18 @@ final class external_test extends \advanced_testcase {
      * @param string|null $warning Expected warning
      * @param string|null $error Expected error
      */
-    public function test_generate_external_description_item(string $result, array $yaml, int $indent = 0,
-            string|null $warning = null, string|null $error = null): void {
+    public function test_generate_external_description_item(
+        string $result,
+        array $yaml,
+        int $indent = 0,
+        string|null $warning = null,
+        string|null $error = null
+    ): void {
 
-        $method = new \ReflectionMethod(\tool_pluginskel\local\skel\external_function_file::class,
-            'generate_external_description_item');
+        $method = new \ReflectionMethod(
+            \tool_pluginskel\local\skel\external_function_file::class,
+            'generate_external_description_item'
+        );
         $method->setAccessible(true);
 
         $logger = new Logger('externaltest');
@@ -215,14 +221,12 @@ final class external_test extends \advanced_testcase {
 
         if ($warning) {
             $this->assertTrue($log->hasWarningThatContains($warning));
-
         } else {
             $this->assertFalse($log->hasWarningRecords(), 'Unexpected warnings: ' . json_encode($log->getRecords()));
         }
 
         if ($error) {
             $this->assertTrue($log->hasErrorThatContains($error));
-
         } else {
             $this->assertFalse($log->hasErrorRecords(), 'Unexpected errors: ' . json_encode($log->getRecords()));
         }
@@ -461,8 +465,10 @@ final class external_test extends \advanced_testcase {
      */
     public function test_generate_external_description_required_default(string $result, array $yaml): void {
 
-        $method = new \ReflectionMethod(\tool_pluginskel\local\skel\external_function_file::class,
-            'generate_external_description_required_default');
+        $method = new \ReflectionMethod(
+            \tool_pluginskel\local\skel\external_function_file::class,
+            'generate_external_description_required_default'
+        );
         $method->setAccessible(true);
 
         $generator = new \tool_pluginskel\local\skel\external_function_file();

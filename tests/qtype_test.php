@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class qtype_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'qtype_test',
@@ -61,7 +60,7 @@ final class qtype_test extends \advanced_testcase {
     ];
 
     /** @var string The plugin name, without the frankenstyle prefix. */
-    static protected $qtypename;
+    protected static $qtypename;
 
     /**
      * Sets the $qtypename.
@@ -70,7 +69,7 @@ final class qtype_test extends \advanced_testcase {
         global $CFG;
         parent::setUpBeforeClass();
 
-        list($type, $qtypename) = \core_component::normalize_component(self::$recipe['component']);
+        [$type, $qtypename] = \core_component::normalize_component(self::$recipe['component']);
 
         self::$qtypename = $qtypename;
     }
@@ -93,7 +92,7 @@ final class qtype_test extends \advanced_testcase {
         $this->assertArrayHasKey('questiontype.php', $files);
         $this->assertArrayHasKey('classes/output/renderer.php', $files);
 
-        $editform = 'edit_'.self::$qtypename.'_form.php';
+        $editform = 'edit_' . self::$qtypename . '_form.php';
         $this->assertArrayHasKey($editform, $files);
     }
 
@@ -113,14 +112,14 @@ final class qtype_test extends \advanced_testcase {
         $this->assertArrayHasKey('question.php', $files);
         $questionfile = $files['question.php'];
 
-        $description = 'Question definition class for '.self::$qtypename;
+        $description = 'Question definition class for ' . self::$qtypename;
         $this->assertStringContainsString($description, $questionfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $questionfile);
 
         $baseclass = $recipe['qtype_features']['base_class'];
-        $questionclass = 'class '.$recipe['component'].'_question extends '.$baseclass;
+        $questionclass = 'class ' . $recipe['component'] . '_question extends ' . $baseclass;
         $this->assertStringContainsString($questionclass, $questionfile);
     }
 
@@ -140,13 +139,13 @@ final class qtype_test extends \advanced_testcase {
         $this->assertArrayHasKey('questiontype.php', $files);
         $questiontypefile = $files['questiontype.php'];
 
-        $description = 'Question type class for '.self::$qtypename.' is defined here.';
+        $description = 'Question type class for ' . self::$qtypename . ' is defined here.';
         $this->assertStringContainsString($description, $questiontypefile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $questiontypefile);
 
-        $questiontypeclass = 'class '.$recipe['component'].' extends question_type';
+        $questiontypeclass = 'class ' . $recipe['component'] . ' extends question_type';
         $this->assertStringContainsString($questiontypeclass, $questiontypefile);
     }
 
@@ -166,13 +165,13 @@ final class qtype_test extends \advanced_testcase {
         $this->assertArrayHasKey('classes/output/renderer.php', $files);
         $rendererfile = $files['classes/output/renderer.php'];
 
-        $description = 'The '.self::$qtypename.' question renderer class is defined here.';
+        $description = 'The ' . self::$qtypename . ' question renderer class is defined here.';
         $this->assertStringContainsString($description, $rendererfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $rendererfile);
 
-        $rendererclass = 'class '.$recipe['component'].'_renderer extends qtype_renderer';
+        $rendererclass = 'class ' . $recipe['component'] . '_renderer extends qtype_renderer';
         $this->assertStringContainsString($rendererclass, $rendererfile);
     }
 
@@ -189,17 +188,17 @@ final class qtype_test extends \advanced_testcase {
         $manager->make();
 
         $files = $manager->get_files_content();
-        $editform = 'edit_'.self::$qtypename.'_form.php';
+        $editform = 'edit_' . self::$qtypename . '_form.php';
         $this->assertArrayHasKey($editform, $files);
         $editformfile = $files[$editform];
 
-        $description = 'The editing form for '.self::$qtypename.' question type is defined here.';
+        $description = 'The editing form for ' . self::$qtypename . ' question type is defined here.';
         $this->assertStringContainsString($description, $editformfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringContainsString($moodleinternal, $editformfile);
 
-        $editformclass = 'class '.$recipe['component'].'_edit_form extends question_edit_form';
+        $editformclass = 'class ' . $recipe['component'] . '_edit_form extends question_edit_form';
         $this->assertStringContainsString($editformclass, $editformfile);
     }
 }

@@ -34,7 +34,6 @@ use tool_pluginskel\local\util\exception;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class lang_file extends php_internal_file {
-
     /**
      * Set the data to be eventually rendered.
      *

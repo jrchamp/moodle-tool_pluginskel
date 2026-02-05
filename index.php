@@ -53,28 +53,23 @@ $component = optional_param('component1', '', PARAM_TEXT);
 $returnurl = new moodle_url('/admin/tool/pluginskel/index.php');
 
 if ($step == 0) {
-
     $mform0 = new tool_pluginskel_step0_form();
     $formdata = $mform0->get_data();
     $PAGE->requires->js_call_amd('tool_pluginskel/showtypeprefix', 'init');
 
     if (!empty($formdata)) {
-
         $data = [];
         $recipe = [];
         $componenttype = '';
 
         if (!empty($formdata->proceedmanually)) {
-
             if (empty($formdata->componentname)) {
                 throw new moodle_exception('emptypluginname', 'tool_pluginskel', $returnurl);
             }
 
-            $recipe['component'] = $formdata->componenttype.'_'.$formdata->componentname;
+            $recipe['component'] = $formdata->componenttype . '_' . $formdata->componentname;
             $componenttype = $formdata->componenttype;
-
         } else {
-
             if (!empty($formdata->proceedrecipefile)) {
                 $recipestring = $mform0->get_file_content('recipefile');
             } else if (!empty($formdata->proceedrecipe)) {
@@ -86,7 +81,7 @@ if ($step == 0) {
             }
 
             $recipe = tool_pluginskel\local\util\yaml::decode_string($recipestring);
-            list($componenttype, $componentname) = core_component::normalize_component($recipe['component']);
+            [$componenttype, $componentname] = core_component::normalize_component($recipe['component']);
 
             $generalvars = tool_pluginskel\local\util\manager::get_general_variables();
             $componentvars = tool_pluginskel\local\util\manager::get_component_variables($recipe['component']);
@@ -95,7 +90,7 @@ if ($step == 0) {
             $rootvars = array_merge($generalvars, $featuresvars);
             $rootvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_recipe($rootvars, $recipe);
 
-            $componentfeatures = $componenttype.'_features';
+            $componentfeatures = $componenttype . '_features';
             $componentvarscount = [];
             if (!empty($recipe[$componentfeatures])) {
                 $componentvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_recipe(
@@ -116,17 +111,12 @@ if ($step == 0) {
         echo $OUTPUT->header();
         $mform1->display();
         echo $OUTPUT->footer();
-
     } else {
-
         echo $OUTPUT->header();
         $mform0->display();
         echo $OUTPUT->footer();
-
     }
-
 } else if ($step == 1) {
-
     // Reconstructing the form elements.
     $generalvars = tool_pluginskel\local\util\manager::get_general_variables();
     $componentvars = tool_pluginskel\local\util\manager::get_component_variables($component);
@@ -135,10 +125,12 @@ if ($step == 0) {
     $rootvars = array_merge($generalvars, $featuresvars);
     $rootvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_form($rootvars);
 
-    list($componenttype, $componentname) = core_component::normalize_component($component);
-    $componentfeatures = $componenttype.'_features';
-    $componentvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_form($componentvars,
-                                                                                                      $componentfeatures);
+    [$componenttype, $componentname] = core_component::normalize_component($component);
+    $componentfeatures = $componenttype . '_features';
+    $componentvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_form(
+        $componentvars,
+        $componentfeatures
+    );
 
     $data = array_merge($rootvarscount, $componentvarscount);
     $data['recipe'] = ['component' => $component];
@@ -149,27 +141,19 @@ if ($step == 0) {
     $recipe = $mform1->get_recipe();
 
     if (!empty($formdata['buttondownloadskel'])) {
-
         tool_pluginskel\local\util\index_helper::download_plugin_skeleton($recipe);
-
     } else if (!empty($formdata['buttondownloadrecipe'])) {
-
         $recipestring = tool_pluginskel\local\util\yaml::encode($recipe);
         tool_pluginskel\local\util\index_helper::download_recipe($recipestring);
-
     } else if (!empty($formdata['buttonshowrecipe'])) {
-
         $data = ['recipe' => $recipe];
         $mform2 = new tool_pluginskel_step2_form(null, $data);
 
         echo $OUTPUT->header();
         $mform2->display();
         echo $OUTPUT->footer();
-
     }
-
 } else if ($step == 2) {
-
     // Reconstruct the form.
     $recipestub = ['component' => $component];
     $data = ['recipe' => $recipestub];
@@ -179,16 +163,11 @@ if ($step == 0) {
     $recipestring = $formdata['recipe'];
 
     if (!empty($formdata['buttondownloadrecipe'])) {
-
         tool_pluginskel\local\util\index_helper::download_recipe($recipestring);
-
     } else if (!empty($formdata['buttondownloadskel'])) {
-
         $recipe = tool_pluginskel\local\util\yaml::decode_string($recipestring);
         tool_pluginskel\local\util\index_helper::download_plugin_skeleton($recipe);
-
     } else if (!empty($formdata['buttonback'])) {
-
         $recipe = tool_pluginskel\local\util\yaml::decode_string($recipestring);
 
         $generalvars = tool_pluginskel\local\util\manager::get_general_variables();
@@ -198,8 +177,8 @@ if ($step == 0) {
         $rootvars = array_merge($generalvars, $featuresvars);
         $rootvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_recipe($rootvars, $recipe);
 
-        list($componenttype, $componentname) = core_component::normalize_component($component);
-        $componentfeatures = $componenttype.'_features';
+        [$componenttype, $componentname] = core_component::normalize_component($component);
+        $componentfeatures = $componenttype . '_features';
         $componentvarscount = [];
         if (!empty($recipe[$componentfeatures])) {
             $componentvarscount = tool_pluginskel\local\util\index_helper::get_array_variable_count_from_recipe(

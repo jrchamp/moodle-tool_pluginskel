@@ -40,7 +40,7 @@ function tool_pluginskel_expand_path(string $path) {
             return false;
         }
 
-        $path = $homedir.substr($path, 1);
+        $path = $homedir . substr($path, 1);
     }
 
     if ($path[0] !== DIRECTORY_SEPARATOR) {

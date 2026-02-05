@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class atto_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'atto_test',
@@ -73,7 +72,7 @@ final class atto_test extends \advanced_testcase {
      */
     public static function setUpBeforeClass(): void {
         parent::setUpBeforeClass();
-        list($type, $name) = \core_component::normalize_component(self::$recipe['component']);
+        [$type, $name] = \core_component::normalize_component(self::$recipe['component']);
         self::$plugintype = $type;
         self::$pluginname = $name;
     }
@@ -96,15 +95,15 @@ final class atto_test extends \advanced_testcase {
         $this->assertArrayHasKey('yui/src/button/js/button.js', $files);
         $buttonjsfile = $files['yui/src/button/js/button.js'];
 
-        $description = 'The Atto plugin '.self::$pluginname.' is defined here.';
+        $description = 'The Atto plugin ' . self::$pluginname . ' is defined here.';
         $this->assertStringContainsString($description, $buttonjsfile);
 
-        $namespace = "Y.namespace('M.".$recipe['component']."').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin";
+        $namespace = "Y.namespace('M." . $recipe['component'] . "').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin";
         $this->assertStringContainsString($namespace, $buttonjsfile);
 
         $paramname = $recipe['atto_features']['params_for_js'][0]['name'];
         $default = $recipe['atto_features']['params_for_js'][0]['default'];
-        $attrs = '/ATTRS: {\s+'.$paramname.': {\s+value: \''.$default.'\'/';
+        $attrs = '/ATTRS: {\s+' . $paramname . ': {\s+value: \'' . $default . '\'/';
         $this->assertMatchesRegularExpression($attrs, $buttonjsfile);
     }
 
@@ -125,7 +124,7 @@ final class atto_test extends \advanced_testcase {
         $this->assertArrayHasKey('yui/src/button/build.json', $files);
         $buildfile = $files['yui/src/button/build.json'];
 
-        $name = 'moodle-'.$recipe['component'].'-button';
+        $name = 'moodle-' . $recipe['component'] . '-button';
         $this->assertStringContainsString($name, $buildfile);
     }
 
@@ -146,7 +145,7 @@ final class atto_test extends \advanced_testcase {
         $this->assertArrayHasKey('yui/src/button/meta/button.json', $files);
         $buttonfile = $files['yui/src/button/meta/button.json'];
 
-        $name = 'moodle-'.$recipe['component'].'-button';
+        $name = 'moodle-' . $recipe['component'] . '-button';
         $this->assertStringContainsString($name, $buttonfile);
     }
 
@@ -167,19 +166,19 @@ final class atto_test extends \advanced_testcase {
         $this->assertArrayHasKey('lib.php', $files);
         $libfile = $files['lib.php'];
 
-        $stringsforjs = 'function '.$recipe['component'].'_strings_for_js()';
+        $stringsforjs = 'function ' . $recipe['component'] . '_strings_for_js()';
         $this->assertStringContainsString($stringsforjs, $libfile);
 
         $id = $recipe['atto_features']['strings_for_js'][0]['id'];
-        $strings = '/\$PAGE->requires_strings_for_js\(\[\s+\''.$id.'\',\s+\]\)/';
+        $strings = '/\$PAGE->requires_strings_for_js\(\[\s+\'' . $id . '\',\s+\]\)/';
         $this->assertMatchesRegularExpression($strings, $libfile);
 
-        $paramsforjs = 'function '.$recipe['component'].'_params_for_js($elementid, $options, $foptions)';
+        $paramsforjs = 'function ' . $recipe['component'] . '_params_for_js($elementid, $options, $foptions)';
         $this->assertStringContainsString($paramsforjs, $libfile);
 
         $paramname = $recipe['atto_features']['params_for_js'][0]['name'];
         $value = $recipe['atto_features']['params_for_js'][0]['value'];
-        $params = '/return \[\s+\''.$paramname.'\' => \''.$value.'\',\s+\];/';
+        $params = '/return \[\s+\'' . $paramname . '\' => \'' . $value . '\',\s+\];/';
         $this->assertMatchesRegularExpression($params, $libfile);
     }
 
@@ -197,10 +196,10 @@ final class atto_test extends \advanced_testcase {
 
         $files = $manager->get_files_content();
 
-        $this->assertArrayHasKey('lang/en/'.$recipe['component'].'.php', $files);
-        $langfile = $files['lang/en/'.$recipe['component'].'.php'];
+        $this->assertArrayHasKey('lang/en/' . $recipe['component'] . '.php', $files);
+        $langfile = $files['lang/en/' . $recipe['component'] . '.php'];
 
         $langstring = $recipe['atto_features']['strings_for_js'][0];
-        $this->assertStringContainsString("\$string['".$langstring['id']."'] = '".$langstring['text']."';", $langfile);
+        $this->assertStringContainsString("\$string['" . $langstring['id'] . "'] = '" . $langstring['text'] . "';", $langfile);
     }
 }

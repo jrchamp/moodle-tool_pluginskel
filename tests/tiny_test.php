@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class tiny_test extends \advanced_testcase {
-
     /**
      * Get test based on settings.
      *
@@ -102,7 +101,7 @@ final class tiny_test extends \advanced_testcase {
             'classes/plugininfo.php' => [
                 'general' => [
                     preg_quote('namespace tiny_test;', '/'),
-                    preg_quote('class plugininfo extends plugin', '/') ,
+                    preg_quote('class plugininfo extends plugin', '/'),
                 ],
                 'options' => [
                     preg_quote('plugin_with_configuration', '/'),
@@ -271,7 +270,8 @@ final class tiny_test extends \advanced_testcase {
                     'options' => [[
                         'name' => 'draftItemId',
                         'type' => 'string',
-                    ]],
+                    ],
+                    ],
                 ]),
                 'files' => self::get_expected_files([
                     'options' => true,

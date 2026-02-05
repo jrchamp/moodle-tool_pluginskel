@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class enrol_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'enrol_test',
@@ -127,30 +126,30 @@ final class enrol_test extends \advanced_testcase {
         $this->assertArrayHasKey('lib.php', $files);
         $libfile = $files['lib.php'];
 
-        list($type, $enrolname) = \core_component::normalize_component($recipe['component']);
-        $description = 'The enrol plugin '.$enrolname.' is defined here.';
+        [$type, $enrolname] = \core_component::normalize_component($recipe['component']);
+        $description = 'The enrol plugin ' . $enrolname . ' is defined here.';
         $this->assertStringContainsString($description, $libfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringNotContainsString($moodleinternal, $libfile);
 
-        $classdefinition = 'class '.$recipe['component'].'_plugin extends enrol_plugin';
+        $classdefinition = 'class ' . $recipe['component'] . '_plugin extends enrol_plugin';
         $this->assertStringContainsString($classdefinition, $libfile);
 
         $returnvalue = $recipe['enrol_features']['allow_enrol'] == true ? 'true' : 'false';
-        $allowenrol = '/public function allow_enrol\(\$instance\) {\s+return '.$returnvalue.';/';
+        $allowenrol = '/public function allow_enrol\(\$instance\) {\s+return ' . $returnvalue . ';/';
         $this->assertMatchesRegularExpression($allowenrol, $libfile);
 
         $returnvalue = $recipe['enrol_features']['allow_unenrol'] == true ? 'true' : 'false';
-        $allowunenrol = '/public function allow_unenrol\(\$instance\) {\s+return '.$returnvalue.';/';
+        $allowunenrol = '/public function allow_unenrol\(\$instance\) {\s+return ' . $returnvalue . ';/';
         $this->assertMatchesRegularExpression($allowunenrol, $libfile);
 
         $returnvalue = $recipe['enrol_features']['allow_manage'] == true ? 'true' : 'false';
-        $allowmanage = '/public function allow_manage\(\$instance\) {\s+return '.$returnvalue.';/';
+        $allowmanage = '/public function allow_manage\(\$instance\) {\s+return ' . $returnvalue . ';/';
         $this->assertMatchesRegularExpression($allowmanage, $libfile);
 
         $returnvalue = $recipe['enrol_features']['allow_unenrol_user'] == true ? 'true' : 'false';
-        $allowunenroluser = '/public function allow_unenrol_user\(\$instance\, \$ue\) {\s+return '.$returnvalue.';/';
+        $allowunenroluser = '/public function allow_unenrol_user\(\$instance\, \$ue\) {\s+return ' . $returnvalue . ';/';
         $this->assertMatchesRegularExpression($allowunenroluser, $libfile);
     }
 }

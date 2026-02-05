@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class lang_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_langtest',
@@ -70,12 +69,12 @@ final class lang_test extends \advanced_testcase {
         $manager->make();
 
         $files = $manager->get_files_content();
-        $this->assertArrayHasKey('lang/en/'.$recipe['component'].'.php', $files);
-        $langfile = $files['lang/en/'.$recipe['component'].'.php'];
+        $this->assertArrayHasKey('lang/en/' . $recipe['component'] . '.php', $files);
+        $langfile = $files['lang/en/' . $recipe['component'] . '.php'];
 
         $this->assertStringContainsString('Plugin strings are defined here.', $langfile);
         $this->assertMatchesRegularExpression('/\* @category\s+string/', $langfile);
-        $this->assertStringContainsString("\$string['pluginname'] = '".$recipe['name'], $langfile);
+        $this->assertStringContainsString("\$string['pluginname'] = '" . $recipe['name'], $langfile);
 
         $id = $recipe['lang_strings'][0]['id'];
         $text = $recipe['lang_strings'][0]['text'];

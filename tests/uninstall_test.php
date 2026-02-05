@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class uninstall_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_uninstalltest',
@@ -72,7 +71,7 @@ final class uninstall_test extends \advanced_testcase {
 
         $description = 'Code that is executed before the tables and data are dropped during the plugin uninstallation.';
         $this->assertStringContainsString($description, $uninstallfile);
-        $this->assertStringContainsString('function xmldb_'.$recipe['component'].'_uninstall()', $uninstallfile);
+        $this->assertStringContainsString('function xmldb_' . $recipe['component'] . '_uninstall()', $uninstallfile);
     }
 
     /**

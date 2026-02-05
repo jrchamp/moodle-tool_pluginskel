@@ -31,7 +31,7 @@ if ($hassiteconfig) {
         'tool_pluginskel/copyright',
         new lang_string('copyright', 'tool_pluginskel'),
         new lang_string('copyright_desc', 'tool_pluginskel'),
-        date('Y').' Your Name <you@example.com>',
+        date('Y') . ' Your Name <you@example.com>',
         PARAM_RAW
     ));
 
@@ -40,7 +40,8 @@ if ($hassiteconfig) {
     $ADMIN->add(
         'development',
         new admin_externalpage(
-            'tool_pluginskel', get_string('generateskel', 'tool_pluginskel'),
+            'tool_pluginskel',
+            get_string('generateskel', 'tool_pluginskel'),
             new moodle_url('/admin/tool/pluginskel/index.php')
         )
     );

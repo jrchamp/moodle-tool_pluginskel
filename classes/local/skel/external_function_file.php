@@ -25,7 +25,6 @@ namespace tool_pluginskel\local\skel;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class external_function_file extends php_single_file {
-
     /**
      * Generate the skeleton of the external function implementation.
      *
@@ -87,7 +86,6 @@ class external_function_file extends php_single_file {
 
         if (empty($external['parameters']) || !is_array($external['parameters'])) {
             return [];
-
         } else {
             $params = [];
             foreach ($external['parameters'] as $param) {
@@ -98,7 +96,6 @@ class external_function_file extends php_single_file {
 
                 if (isset($param['multiple']) || isset($param['single'])) {
                     $params[$param['name']] = 'array';
-
                 } else {
                     $params[$param['name']] = $param['type'] ?? null;
                 }
@@ -229,7 +226,6 @@ class external_function_file extends php_single_file {
             $code .= "\n";
             $code .= str_repeat(' ', $indent);
             $code .= ")";
-
         } else if (!empty($param['single']) && is_array($param['single'])) {
             $code .= "new external_single_structure([\n";
             foreach ($param['single'] as $sub) {
@@ -245,7 +241,6 @@ class external_function_file extends php_single_file {
             }
 
             $code .= ")";
-
         } else {
             if (empty($param['type'])) {
                 $this->logger->error('PARAM type not specified for external value');
@@ -284,7 +279,6 @@ class external_function_file extends php_single_file {
 
             if (isset($param['default'])) {
                 $code .= ", " . $param['default'];
-
             } else {
                 $code .= ", null";
             }

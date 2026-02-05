@@ -34,7 +34,6 @@ use coding_exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class lib_php_file extends php_library_file {
-
     /**
      * Set the data to be eventually rendered.
      *

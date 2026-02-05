@@ -34,7 +34,6 @@ use coding_exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer_file extends php_single_file {
-
     /**
      * Sets the name of the observer.
      *
@@ -83,7 +82,6 @@ class observer_file extends php_single_file {
             throw new coding_exception('Skeleton data not set');
         }
 
-        $this->data['observer']['namespace'] = 'namespace '.$namespace.';';
+        $this->data['observer']['namespace'] = 'namespace ' . $namespace . ';';
     }
-
 }

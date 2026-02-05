@@ -35,7 +35,6 @@ require_once($CFG->libdir . '/formslib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool_pluginskel_step1_form extends moodleform {
-
     /** @var string The component type. */
     protected $componenttype;
 
@@ -51,12 +50,11 @@ class tool_pluginskel_step1_form extends moodleform {
             <p>Defining the plugin skeleton recipe via this interface is known to not work with recent Boost based themes.
             Additionally, some features - such as describing the privacy API - is not supported yet via this interface.</p>
             <p>Please refer to the <tt>cli/example.yaml</tt> and define the recipe manually as a YAML file.</p>
-            </div>'
-        );
+            </div>');
 
         $recipe = $this->_customdata['recipe'];
         $component = $recipe['component'];
-        list($this->componenttype, $componentname) = core_component::normalize_component($component);
+        [$this->componenttype, $componentname] = core_component::normalize_component($component);
 
         $generalvars = tool_pluginskel\local\util\manager::get_general_variables();
         $componentvars = tool_pluginskel\local\util\manager::get_component_variables($component);
@@ -66,7 +64,6 @@ class tool_pluginskel_step1_form extends moodleform {
         $mform->setExpanded('generalhdr', true);
 
         foreach ($generalvars as $variable) {
-
             $type = $variable['type'];
             $elementname = $variable['name'];
 
@@ -95,10 +92,9 @@ class tool_pluginskel_step1_form extends moodleform {
         }
 
         foreach ($featuresvars as $variable) {
-
             $type = $variable['type'];
             // Features that are not arrays are always under 'features' in the recipe.
-            $elementname = 'features['.$variable['name'].']';
+            $elementname = 'features[' . $variable['name'] . ']';
             $recipefeatures = empty($recipe['features']) ? [] : $recipe['features'];
 
             // Array variables will be added at the bottom of the page.
@@ -125,10 +121,9 @@ class tool_pluginskel_step1_form extends moodleform {
         }
 
         foreach ($componentvars as $variable) {
-
             $type = $variable['type'];
-            $elementname = $this->componenttype.'_features['.$variable['name'].']';
-            $componentfeatures = $this->componenttype.'_features';
+            $elementname = $this->componenttype . '_features[' . $variable['name'] . ']';
+            $componentfeatures = $this->componenttype . '_features';
             $componentrecipe = empty($recipe[$componentfeatures]) ? [] : $recipe[$componentfeatures];
 
             // Arrays will be added inside their own fieldset.
@@ -156,9 +151,8 @@ class tool_pluginskel_step1_form extends moodleform {
         }
 
         foreach ($componentvars as $variable) {
-
             $type = $variable['type'];
-            $parentname = $this->componenttype.'_features';
+            $parentname = $this->componenttype . '_features';
 
             if ($type === 'numeric-array') {
                 $this->add_numeric_fieldset($variable, $recipe, $parentname);
@@ -295,7 +289,7 @@ class tool_pluginskel_step1_form extends moodleform {
         if (is_null($index)) {
             $indexprefix = '';
         } else {
-            $indexprefix = $index.'. ';
+            $indexprefix = $index . '. ';
         }
 
         // Adding 'undefine' option to select element for optional template variable.
@@ -305,7 +299,7 @@ class tool_pluginskel_step1_form extends moodleform {
         }
 
         $label = $this->construct_label($elementname);
-        $mform->addElement('select', $elementname, $indexprefix.get_string($label, 'tool_pluginskel'), $selectvalues);
+        $mform->addElement('select', $elementname, $indexprefix . get_string($label, 'tool_pluginskel'), $selectvalues);
         $mform->addHelpButton($elementname, $label, 'tool_pluginskel');
 
         if (!empty($recipe[$variablename]) && !empty($selectvalues[$recipe[$variablename]])) {
@@ -334,11 +328,11 @@ class tool_pluginskel_step1_form extends moodleform {
         if (is_null($index)) {
             $indexprefix = '';
         } else {
-            $indexprefix = $index.'. ';
+            $indexprefix = $index . '. ';
         }
 
         $label = $this->construct_label($elementname);
-        $mform->addElement('advcheckbox', $elementname, $indexprefix.get_string($label, 'tool_pluginskel'), '', null, $values);
+        $mform->addElement('advcheckbox', $elementname, $indexprefix . get_string($label, 'tool_pluginskel'), '', null, $values);
         $mform->addHelpButton($elementname, $label, 'tool_pluginskel');
 
         if (!empty($recipe[$variablename]) && !empty($values[$recipe[$variablename]])) {
@@ -370,11 +364,11 @@ class tool_pluginskel_step1_form extends moodleform {
         if (is_null($index)) {
             $indexprefix = '';
         } else {
-            $indexprefix = $index.'. ';
+            $indexprefix = $index . '. ';
         }
 
         $label = $this->construct_label($elementname);
-        $mform->addElement('text', $elementname, $indexprefix.get_string($label, 'tool_pluginskel'));
+        $mform->addElement('text', $elementname, $indexprefix . get_string($label, 'tool_pluginskel'));
         $mform->addHelpButton($elementname, $label, 'tool_pluginskel');
 
         if ($templatevar['type'] == 'int') {
@@ -411,11 +405,11 @@ class tool_pluginskel_step1_form extends moodleform {
 
         if (empty($parentname)) {
             $fieldsetname = $variablename;
-            $countname = $variablename.'count';
+            $countname = $variablename . 'count';
             $recipevalues = empty($recipe[$variablename]) ? [] : $recipe[$variablename];
         } else {
-            $fieldsetname = $parentname.'['.$variablename.']';
-            $countname = $parentname.'_'.$variablename.'count';
+            $fieldsetname = $parentname . '[' . $variablename . ']';
+            $countname = $parentname . '_' . $variablename . 'count';
             $recipevalues = empty($recipe[$parentname][$variablename]) ? [] : $recipe[$parentname][$variablename];
         }
 
@@ -443,11 +437,17 @@ class tool_pluginskel_step1_form extends moodleform {
         $this->add_numeric_fieldset_elements($fieldsetname, $templatevalues, $values, $count);
 
         $buttonarr = [];
-        $buttonarr[] = $mform->createElement('button', 'addmore_'.$fieldsetname,
-                                              get_string('addmore_'.$variablename, 'tool_pluginskel'));
-        $buttonarr[] = $mform->createElement('button', 'delete_'.$fieldsetname,
-                                              get_string('delete_'.$variablename, 'tool_pluginskel'));
-        $mform->addGroup($buttonarr, 'buttons_'.$fieldsetname, '', ['    '], false);
+        $buttonarr[] = $mform->createElement(
+            'button',
+            'addmore_' . $fieldsetname,
+            get_string('addmore_' . $variablename, 'tool_pluginskel')
+        );
+        $buttonarr[] = $mform->createElement(
+            'button',
+            'delete_' . $fieldsetname,
+            get_string('delete_' . $variablename, 'tool_pluginskel')
+        );
+        $mform->addGroup($buttonarr, 'buttons_' . $fieldsetname, '', ['    '], false);
 
         $mform->addElement('hidden', $countname, $count);
         $mform->setType($countname, PARAM_INT);
@@ -470,7 +470,7 @@ class tool_pluginskel_step1_form extends moodleform {
             $fieldsetname = $variablename;
             $recipevalues = empty($recipe[$variablename]) ? [] : $recipe[$variablename];
         } else {
-            $fieldsetname = $parentname.'['.$variablename.']';
+            $fieldsetname = $parentname . '[' . $variablename . ']';
             $recipevalues = empty($recipe[$parentname][$variablename]) ? [] : $recipe[$parentname][$variablename];
         }
 
@@ -489,13 +489,12 @@ class tool_pluginskel_step1_form extends moodleform {
 
         // Adding the fieldset elements to the page.
         foreach ($templatevalues as $nestedvariable) {
-
             $type = $nestedvariable['type'];
 
             if ($type === 'numeric-array') {
                 $this->add_nested_array_variable($fieldsetname, $nestedvariable, $recipevalues);
             } else {
-                $elementname = $fieldsetname.'['.$nestedvariable['name'].']';
+                $elementname = $fieldsetname . '[' . $nestedvariable['name'] . ']';
                 $this->add_fieldset_element($elementname, $nestedvariable, $recipevalues);
             }
         }
@@ -597,15 +596,13 @@ class tool_pluginskel_step1_form extends moodleform {
         // Adding elements which have values specified in the recipe.
         if (!empty($recipevalues)) {
             foreach ($recipevalues as $index => $fieldsetvalues) {
-
                 foreach ($templatevars as $variable) {
-
                     if ($variable['type'] === 'numeric-array') {
-                        $parentname = $fieldsetname.'['.$index.']';
+                        $parentname = $fieldsetname . '[' . $index . ']';
                         $this->add_nested_array_variable($parentname, $variable, $fieldsetvalues, $index);
                     } else {
-                        $elementname = $fieldsetname.'['.$index.']['.$variable['name'].']';
-                        $indexprefix = is_null($parentindex) ? $index : $parentindex.'.'.$index;
+                        $elementname = $fieldsetname . '[' . $index . '][' . $variable['name'] . ']';
+                        $indexprefix = is_null($parentindex) ? $index : $parentindex . '.' . $index;
                         $this->add_fieldset_element($elementname, $variable, $fieldsetvalues, $indexprefix);
                     }
                 }
@@ -621,13 +618,12 @@ class tool_pluginskel_step1_form extends moodleform {
         $currentcount = count($recipevalues);
         while ($currentcount < $count) {
             foreach ($templatevars as $variable) {
-
                 if ($variable['type'] == 'numeric-array') {
-                    $parentname = $fieldsetname.'['.$currentcount.']';
+                    $parentname = $fieldsetname . '[' . $currentcount . ']';
                     $this->add_nested_array_variable($parentname, $variable, [], $currentcount);
                 } else {
-                    $elementname = $fieldsetname.'['.$currentcount.']['.$variable['name'].']';
-                    $indexprefix = is_null($parentindex) ? $currentcount : ($parentindex.'.'.$currentcount);
+                    $elementname = $fieldsetname . '[' . $currentcount . '][' . $variable['name'] . ']';
+                    $indexprefix = is_null($parentindex) ? $currentcount : ($parentindex . '.' . $currentcount);
                     $this->add_fieldset_element($elementname, $variable, [], $indexprefix);
                 }
             }
@@ -653,16 +649,16 @@ class tool_pluginskel_step1_form extends moodleform {
 
         $mform = $this->_form;
         $variablename = $nestedvariable['name'];
-        $formname = $parentname.'['.$variablename.']';
+        $formname = $parentname . '[' . $variablename . ']';
         $templatevalues = $nestedvariable['values'];
 
         $countname = str_replace('][', '_', $parentname);
         $countname = str_replace('[', '_', $countname);
         $countname = str_replace(']', '_', $countname);
         if (substr($countname, -1) !== '_') {
-            $countname = $countname.'_';
+            $countname = $countname . '_';
         }
-        $countname = $countname.$variablename.'count';
+        $countname = $countname . $variablename . 'count';
         if (empty($this->_customdata[$countname])) {
             // Create only one entry in the fieldset if more haven't been specified.
             $count = 1;
@@ -670,18 +666,21 @@ class tool_pluginskel_step1_form extends moodleform {
             $count = (int) $this->_customdata[$countname];
         }
 
-        $label = $this->construct_label($parentname.$variablename);
-        $mform->addElement('static', $formname, get_string($label, 'tool_pluginskel').':');
+        $label = $this->construct_label($parentname . $variablename);
+        $mform->addElement('static', $formname, get_string($label, 'tool_pluginskel') . ':');
 
         $recipevalues = [];
         if (!empty($nestedrecipe[$variablename]) && is_array($nestedrecipe[$variablename])) {
-            $recipevalues = $this->get_numeric_array_variable_from_recipe($variablename, $templatevalues,
-                                                                          $nestedrecipe[$variablename]);
+            $recipevalues = $this->get_numeric_array_variable_from_recipe(
+                $variablename,
+                $templatevalues,
+                $nestedrecipe[$variablename]
+            );
         }
 
         $this->add_numeric_fieldset_elements($formname, $templatevalues, $recipevalues, $count, $parentindex);
 
-        $mform->addElement('button', 'addmore_'.$formname, get_string('addmore_'.$variablename, 'tool_pluginskel'));
+        $mform->addElement('button', 'addmore_' . $formname, get_string('addmore_' . $variablename, 'tool_pluginskel'));
 
         $mform->addElement('hidden', $countname, $count);
         $mform->setType($countname, PARAM_INT);
@@ -704,7 +703,6 @@ class tool_pluginskel_step1_form extends moodleform {
         $featuresvars = tool_pluginskel\local\util\manager::get_features_variables();
 
         foreach ($generalvars as $variable) {
-
             $variablename = $variable['name'];
             $type = $variable['type'];
 
@@ -721,10 +719,9 @@ class tool_pluginskel_step1_form extends moodleform {
             }
         }
 
-        $componentfeatures = $this->componenttype.'_features';
+        $componentfeatures = $this->componenttype . '_features';
         $componentformdata = isset($formdata[$componentfeatures]) ? $formdata[$componentfeatures] : [];
         foreach ($componentvars as $variable) {
-
             $variablename = $variable['name'];
             $type = $variable['type'];
 
@@ -742,7 +739,6 @@ class tool_pluginskel_step1_form extends moodleform {
         }
 
         foreach ($featuresvars as $variable) {
-
             $variablename = $variable['name'];
             $type = $variable['type'];
 
@@ -782,7 +778,6 @@ class tool_pluginskel_step1_form extends moodleform {
         $ret = [];
 
         foreach ($templatevariable['values'] as $fieldvariable) {
-
             $type = $fieldvariable['type'];
             $fieldname = $fieldvariable['name'];
 
@@ -821,7 +816,6 @@ class tool_pluginskel_step1_form extends moodleform {
         foreach ($variableformdata as $formvalues) {
             $currentvalue = [];
             foreach ($formvalues as $field => $value) {
-
                 if (!empty($value)) {
                     foreach ($templatevariable['values'] as $nestedvariable) {
                         if ($nestedvariable['name'] == $field) {

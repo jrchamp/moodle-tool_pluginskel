@@ -29,7 +29,7 @@ use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/vendor/autoload.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autoload.php');
 
 /**
  * Wrapper for YAML format processing
@@ -38,7 +38,6 @@ require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/vendor/autoload.php
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class yaml {
-
     /**
      * Parse given YAML string
      *
@@ -58,7 +57,7 @@ class yaml {
     public static function decode_file($path) {
 
         if (!is_readable($path)) {
-            throw new exception('Unable to read YAML file: '.$path);
+            throw new exception('Unable to read YAML file: ' . $path);
         }
 
         return SymfonyYaml::parseFile($path);

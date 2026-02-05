@@ -37,7 +37,6 @@ use coding_exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class locallib_php_file extends php_library_file {
-
     /**
      * Adds an event callback functionm to generate code for.
      *

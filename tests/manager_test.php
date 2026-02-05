@@ -32,7 +32,7 @@ use tool_pluginskel\local\util\manager;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/vendor/autoload.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autoload.php');
 
 /**
  * Test case for {@see \tool_pluginskel\local\util\manager} class.
@@ -41,7 +41,6 @@ require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/pluginskel/vendor/autoload.php
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class manager_test extends \advanced_testcase {
-
     /**
      * Return a base recipe for a plugin.
      *
@@ -69,7 +68,7 @@ final class manager_test extends \advanced_testcase {
         $recipe = $this->get_base_recipe();
 
         $manager->load_recipe($recipe);
-        $manager->add_lang_string('foobar', '<h1>Foo bar!</h1>'."\n".'Say {$a} or {$a->foo} here');
+        $manager->add_lang_string('foobar', '<h1>Foo bar!</h1>' . "\n" . 'Say {$a} or {$a->foo} here');
         $manager->make();
 
         $files = $manager->get_files_content();
@@ -81,6 +80,6 @@ final class manager_test extends \advanced_testcase {
         $this->assertStringContainsString("\$string['pluginname'] = 'Foo bar';", $langfile);
 
         // The foobar string has been added explicitly.
-        $this->assertStringContainsString("\$string['foobar'] = '<h1>Foo bar!</h1>\n".'Say {$a} or {$a->foo} here\';', $langfile);
+        $this->assertStringContainsString("\$string['foobar'] = '<h1>Foo bar!</h1>\n" . 'Say {$a} or {$a->foo} here\';', $langfile);
     }
 }

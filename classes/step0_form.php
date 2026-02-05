@@ -35,7 +35,6 @@ require_once($CFG->libdir . '/formslib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool_pluginskel_step0_form extends moodleform {
-
     /**
      * The standard form definiton.
      */
@@ -58,15 +57,24 @@ class tool_pluginskel_step0_form extends moodleform {
 
         $mform->addElement('header', 'recipefilehdr', get_string('recipefilehdr', 'tool_pluginskel'));
         $mform->setExpanded('recipefilehdr', true);
-        $mform->addElement('filepicker', 'recipefile', get_string('recipefile', 'tool_pluginskel'),
-                           null, ['maxbytes' => 50000, 'accepted_types' => '*']);
+        $mform->addElement(
+            'filepicker',
+            'recipefile',
+            get_string('recipefile', 'tool_pluginskel'),
+            null,
+            ['maxbytes' => 50000, 'accepted_types' => '*']
+        );
         $mform->addHelpButton('recipefile', 'recipefile', 'tool_pluginskel');
         $mform->addElement('submit', 'proceedrecipefile', get_string('proceedrecipefile', 'tool_pluginskel'));
 
         $mform->addElement('header', 'recipehdr', get_string('recipehdr', 'tool_pluginskel'));
         $mform->setExpanded('recipehdr', true);
-        $mform->addElement('textarea', 'recipe', get_string('recipe', 'tool_pluginskel'),
-                           ['wrap' => 'virtual',  'rows' => '20', 'cols' => '50']);
+        $mform->addElement(
+            'textarea',
+            'recipe',
+            get_string('recipe', 'tool_pluginskel'),
+            ['wrap' => 'virtual', 'rows' => '20', 'cols' => '50']
+        );
         $mform->addHelpButton('recipe', 'recipe', 'tool_pluginskel');
         $mform->addElement('submit', 'proceedrecipe', get_string('proceedrecipe', 'tool_pluginskel'));
 

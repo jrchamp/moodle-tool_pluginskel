@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class observers_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_observerstest',
@@ -74,7 +73,7 @@ final class observers_test extends \advanced_testcase {
      */
     public function test_db_events_php(): void {
         $logger = new Logger('observerstest');
-        $logger->pushHandler(new NullHandler);
+        $logger->pushHandler(new NullHandler());
         $manager = manager::instance($logger);
 
         $recipe = self::$recipe;
@@ -95,25 +94,24 @@ final class observers_test extends \advanced_testcase {
         $this->assertStringContainsString($observers, $eventsfile);
 
         foreach ($recipe['observers'] as $obs) {
-
             $eventname = str_replace('\\', '\\\\', $obs['eventname']);
-            $observer = "/'eventname' => '".$eventname."',\s+";
+            $observer = "/'eventname' => '" . $eventname . "',\s+";
             $callback = str_replace('\\', '\\\\', $obs['callback']);
-            $observer .= "'callback' => '".$callback."',\s+";
+            $observer .= "'callback' => '" . $callback . "',\s+";
 
             if (isset($obs['includefile'])) {
                 $includefile = str_replace('/', '\\/', $obs['includefile']);
-                $observer .= "'includefile' => '".$includefile."',\s+";
+                $observer .= "'includefile' => '" . $includefile . "',\s+";
             }
 
             if (isset($obs['priority'])) {
                 $priority = $obs['priority'];
-                $observer .= "'priority' => ".$priority.",\s+";
+                $observer .= "'priority' => " . $priority . ",\s+";
             }
 
             if (isset($obs['internal'])) {
                 $internal = $obs['internal'] === true ? 'true' : 'false';
-                $observer .= "'internal' => ".$internal.",\s+";
+                $observer .= "'internal' => " . $internal . ",\s+";
             }
 
             $observer .= '\],/';
@@ -126,7 +124,7 @@ final class observers_test extends \advanced_testcase {
      */
     public function test_event_callback(): void {
         $logger = new Logger('observerstest');
-        $logger->pushHandler(new NullHandler);
+        $logger->pushHandler(new NullHandler());
         $manager = manager::instance($logger);
 
         $recipe = self::$recipe;
@@ -143,7 +141,7 @@ final class observers_test extends \advanced_testcase {
         $description = 'Event observer class.';
         $this->assertStringContainsString($description, $observerfile);
 
-        $namespace = 'namespace '.$recipe['component'].';';
+        $namespace = 'namespace ' . $recipe['component'] . ';';
         $this->assertStringContainsString($namespace, $observerfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
@@ -151,7 +149,7 @@ final class observers_test extends \advanced_testcase {
 
         $this->assertStringContainsString('class event_observer', $observerfile);
 
-        $paramevent = '* @param '.$recipe['observers'][0]['eventname'].' $event';
+        $paramevent = '* @param ' . $recipe['observers'][0]['eventname'] . ' $event';
         $this->assertStringContainsString($paramevent, $observerfile);
 
         $function = 'public static function something_happened($event)';
@@ -162,11 +160,11 @@ final class observers_test extends \advanced_testcase {
 
         $locallibfile = $files['locallib.php'];
 
-        $functiondescription = 'Handle the '.$recipe['observers'][2]['eventname'].' event.';
+        $functiondescription = 'Handle the ' . $recipe['observers'][2]['eventname'] . ' event.';
         $this->assertStringContainsString($functiondescription, $locallibfile);
 
         $functionname = $recipe['observers'][2]['callback'];
-        $function = 'function '.$functionname.'($event)';
+        $function = 'function ' . $functionname . '($event)';
         $this->assertStringContainsString($function, $locallibfile);
     }
 }

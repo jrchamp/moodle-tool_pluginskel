@@ -34,7 +34,6 @@ namespace tool_pluginskel\local\skel;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class php_web_file extends base {
-
     /**
      * Set the data to be eventually rendered.
      *

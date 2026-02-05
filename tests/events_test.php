@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class events_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_eventstest',
@@ -82,18 +81,18 @@ final class events_test extends \advanced_testcase {
         $description = 'The first_event event class.';
         $this->assertStringContainsString($description, $eventfile);
 
-        list($type, $pluginname) = \core_component::normalize_component($recipe['component']);
-        $this->assertStringContainsString('namespace '.$type.'_'.$pluginname.'\event', $eventfile);
+        [$type, $pluginname] = \core_component::normalize_component($recipe['component']);
+        $this->assertStringContainsString('namespace ' . $type . '_' . $pluginname . '\event', $eventfile);
 
         $moodleinternal = "defined('MOODLE_INTERNAL') || die()";
         $this->assertStringNotContainsString($moodleinternal, $eventfile);
 
-        $classname = 'class '.$recipe['events'][0]['eventname'].' extends '.$recipe['events'][0]['extends'];
+        $classname = 'class ' . $recipe['events'][0]['eventname'] . ' extends ' . $recipe['events'][0]['extends'];
         $this->assertStringContainsString($classname, $eventfile);
 
         $eventfile = $files['classes/event/second_event.php'];
 
-        $classname = 'class '.$recipe['events'][1]['eventname'].' extends \core\event\base';
+        $classname = 'class ' . $recipe['events'][1]['eventname'] . ' extends \core\event\base';
         $this->assertStringContainsString($classname, $eventfile);
     }
 }

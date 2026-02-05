@@ -32,7 +32,6 @@ namespace tool_pluginskel\local\skel;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class db_install_xml_file extends base {
-
     /**
      * Set the data to be eventually rendered.
      *
@@ -42,7 +41,7 @@ class db_install_xml_file extends base {
 
         parent::set_data($data);
 
-        $this->data['xmldb_path'] = substr($data['component_root'], 1).'/'.$data['component_name'].'/db';
+        $this->data['xmldb_path'] = substr($data['component_root'], 1) . '/' . $data['component_name'] . '/db';
         $this->data['xmldb_version'] = date('Ymd');
     }
 }

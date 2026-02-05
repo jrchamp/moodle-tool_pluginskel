@@ -108,16 +108,13 @@ if (!empty($options['recipe'])) {
 
     // No positional arguments are expected when --recipe=<path> is used.
     if (!empty($positional)) {
-        cli_error(get_string('cliunknowoption', 'admin',  implode("\n  ", $positional)));
+        cli_error(get_string('cliunknowoption', 'admin', implode("\n  ", $positional)));
     }
-
 } else if (empty($positional)) {
     cli_writeln($help);
     cli_error("Recipe not specified!");
-
 } else if (count($positional) > 1) {
     cli_error(get_string('cliunknowoption', 'admin', implode(' ', $positional)));
-
 } else {
     $recipefile = array_shift($positional);
 }
@@ -159,7 +156,7 @@ if (!array_key_exists($loglevel, $loglevels)) {
 }
 
 $logger = new Logger('tool_pluginskel');
-$logger->pushHandler(new StreamHandler('php://stdout', constant('\Monolog\Logger::'.$loglevel)));
+$logger->pushHandler(new StreamHandler('php://stdout', constant('\Monolog\Logger::' . $loglevel)));
 $logger->debug('Logger initialised');
 
 if (!empty($options['recipe'])) {
@@ -193,7 +190,6 @@ if (!empty($options['target-dir']) && !empty($options['target-moodle'])) {
 }
 
 if (!empty($options['target-dir'])) {
-
     $targetdir = $options['target-dir'];
     $targetdir = tool_pluginskel_expand_path($targetdir);
     if ($targetdir === false) {
@@ -204,10 +200,8 @@ if (!empty($options['target-dir'])) {
         cli_error("Target plugin location is not writable!");
     }
 
-    $targetdir = $targetdir.'/'.$pluginname;
-
+    $targetdir = $targetdir . '/' . $pluginname;
 } else {
-
     if (empty($options['target-moodle'])) {
         $targetdir = $CFG->dirroot;
     } else {
@@ -228,13 +222,13 @@ if (!empty($options['target-dir'])) {
         cli_error("Unknown plugin type '$plugintype'!");
     }
 
-    $targetdir = $targetdir.substr($plugintypes[$plugintype], strlen($CFG->dirroot));
-    $targetdir = $targetdir.'/'.$pluginname;
+    $targetdir = $targetdir . substr($plugintypes[$plugintype], strlen($CFG->dirroot));
+    $targetdir = $targetdir . '/' . $pluginname;
 }
 
 if (file_exists($targetdir)) {
-    cli_error("Target plugin location already exists: ".$targetdir);
+    cli_error("Target plugin location already exists: " . $targetdir);
 }
 
 $manager->write_files($targetdir);
-cli_writeln('Plugin skeleton files generated: '.$targetdir);
+cli_writeln('Plugin skeleton files generated: ' . $targetdir);

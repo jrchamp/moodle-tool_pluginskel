@@ -35,7 +35,6 @@ use core_component;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class manager {
-
     /** @var Monolog\Logger */
     protected $logger = null;
 
@@ -115,7 +114,7 @@ class manager {
      */
     public static function get_component_variables($component) {
 
-        list($type, $name) = core_component::normalize_component($component);
+        [$type, $name] = core_component::normalize_component($component);
 
         $componentvars = [];
 
@@ -123,7 +122,8 @@ class manager {
             $componentvars = [
                 ['name' => 'strings_for_js', 'type' => 'numeric-array', 'values' => [
                     ['name' => 'id', 'type' => 'text'],
-                    ['name' => 'text', 'type' => 'text']],
+                    ['name' => 'text', 'type' => 'text'],
+                ],
                 ],
                 ['name' => 'params_for_js', 'type' => 'numeric-array', 'values' => [
                     ['name' => 'name', 'type' => 'text'],
@@ -194,7 +194,8 @@ class manager {
                 ['name' => 'instance_allow_multiple', 'type' => 'boolean', 'required' => true],
                 ['name' => 'applicable_formats', 'type' => 'numeric-array', 'values' => [
                     ['name' => 'page', 'type' => 'text'],
-                    ['name' => 'allowed', 'type' => 'boolean']],
+                    ['name' => 'allowed', 'type' => 'boolean'],
+                ],
                 ],
                 ['name' => 'backup_moodle2', 'type' => 'associative-array', 'values' => [
                     ['name' => 'restore_task', 'type' => 'boolean'],
@@ -296,16 +297,17 @@ class manager {
                 ['name' => 'title', 'type' => 'text'],
                 ['name' => 'riskbitmask', 'type' => 'text'],
                 ['name' => 'captype', 'type' => 'multiple-options',
-                'values' => ['view' => 'view', 'write' => 'write']],
+                    'values' => ['view' => 'view', 'write' => 'write'],
+                ],
                 ['name' => 'contextlevel', 'type' => 'text'],
                 ['name' => 'archetypes', 'type' => 'numeric-array', 'values' => [
                     ['name' => 'role', 'type' => 'multiple-options', 'values' => get_role_archetypes()],
                     ['name' => 'permission', 'type' => 'multiple-options',
-                    'values' => [
-                        'CAP_ALLOW' => 'CAP_ALLOW',
-                        'CAP_PREVENT' => 'CAP_PREVENT',
-                        'CAP_PROHIBIT' => 'CAP_PROHIBIT',
-                    ],
+                        'values' => [
+                            'CAP_ALLOW' => 'CAP_ALLOW',
+                            'CAP_PREVENT' => 'CAP_PREVENT',
+                            'CAP_PROHIBIT' => 'CAP_PROHIBIT',
+                        ],
                     ],
                 ],
                 ],
@@ -318,7 +320,9 @@ class manager {
             ['name' => 'message_providers', 'type' => 'numeric-array', 'values' => [
                 ['name' => 'name', 'type' => 'text'],
                 ['name' => 'title', 'type' => 'text'],
-                ['name' => 'capability', 'type' => 'text']]],
+                ['name' => 'capability', 'type' => 'text'],
+            ],
+            ],
         ];
 
         $cliscripts = [
@@ -360,7 +364,8 @@ class manager {
 
         $phpunittests = [
             ['name' => 'phpunit_tests', 'type' => 'numeric-array', 'values' => [
-                ['name' => 'classname', 'type' => 'text']],
+                ['name' => 'classname', 'type' => 'text'],
+            ],
             ],
         ];
 
@@ -437,24 +442,23 @@ class manager {
 
         $result = mkdir($targetdir, 0755, true);
         if ($result === false) {
-            throw new exception('Error creating target directory: '.$targetdir);
+            throw new exception('Error creating target directory: ' . $targetdir);
         }
 
         foreach ($this->files as $filename => $file) {
-
-            $filepath = $targetdir.'/'.$filename;
+            $filepath = $targetdir . '/' . $filename;
             $dirpath = dirname($filepath);
 
             if (!file_exists($dirpath)) {
                 $result = mkdir($dirpath, 0755, true);
                 if ($result === false) {
-                    throw new exception('Error creating directory: '.$dirpath);
+                    throw new exception('Error creating directory: ' . $dirpath);
                 }
             }
 
             $result = file_put_contents($filepath, $file->content);
             if ($result === false) {
-                throw new exception('Error writing to file: '.$filepath);
+                throw new exception('Error writing to file: ' . $filepath);
             }
         }
     }
@@ -602,9 +606,9 @@ class manager {
         $this->prepare_file_skeleton('version.php', 'version_php_file', 'version');
 
         if ($plugintype === 'mod') {
-            $this->prepare_file_skeleton('lang/en/'.$this->recipe['component_name'].'.php', 'lang_file', 'lang');
+            $this->prepare_file_skeleton('lang/en/' . $this->recipe['component_name'] . '.php', 'lang_file', 'lang');
         } else {
-            $this->prepare_file_skeleton('lang/en/'.$this->recipe['component'].'.php', 'lang_file', 'lang');
+            $this->prepare_file_skeleton('lang/en/' . $this->recipe['component'] . '.php', 'lang_file', 'lang');
         }
     }
 
@@ -668,18 +672,17 @@ class manager {
         }
 
         foreach ($this->recipe['message_providers'] as $messageprovider) {
-
             if (empty($messageprovider['name'])) {
                 $this->logger->warning('Message provider name not set');
                 continue;
             }
 
             if (empty($messageprovider['title'])) {
-                $this->logger->warning("Title for message provider '".$messageprovider['name']."' not set");
+                $this->logger->warning("Title for message provider '" . $messageprovider['name'] . "' not set");
                 continue;
             }
 
-            $stringid = 'messageprovider:'.$messageprovider['name'];
+            $stringid = 'messageprovider:' . $messageprovider['name'];
             $this->add_lang_string($stringid, $messageprovider['title']);
         }
     }
@@ -707,11 +710,11 @@ class manager {
             }
 
             if (empty($capability['title'])) {
-                $this->logger->warning("Title for capability '".$capability['name']."' not set");
+                $this->logger->warning("Title for capability '" . $capability['name'] . "' not set");
                 continue;
             }
 
-            $stringid = $this->recipe['component_name'].':'.$capability['name'];
+            $stringid = $this->recipe['component_name'] . ':' . $capability['name'];
             $this->add_lang_string($stringid, $capability['title']);
         }
     }
@@ -722,7 +725,6 @@ class manager {
     protected function prepare_phpunit_tests() {
 
         foreach ($this->recipe['phpunit_tests'] as $class) {
-
             $classname = $class['classname'];
 
             if (strpos($classname, $this->recipe['component']) !== false) {
@@ -733,7 +735,7 @@ class manager {
                 $classname = substr($classname, 0, strlen($classname) - strlen('_testcase'));
             }
 
-            $filename = 'tests/'.$classname.'_test.php';
+            $filename = 'tests/' . $classname . '_test.php';
             $this->prepare_file_skeleton($filename, 'phpunit_test_file', 'phpunit');
 
             $this->files[$filename]->set_classname($classname);
@@ -766,7 +768,7 @@ class manager {
 
         foreach ($recipefeatures as $feature) {
             if ($this->has_component_feature($feature)) {
-                $this->files['auth.php']->set_attribute('has_'.$feature);
+                $this->files['auth.php']->set_attribute('has_' . $feature);
             }
         }
 
@@ -792,19 +794,17 @@ class manager {
         $this->prepare_file_skeleton($buildjsonfile, 'base', 'atto/build');
 
         if ($this->has_component_feature('strings_for_js')) {
-
             $this->prepare_file_skeleton('lib.php', 'lib_php_file', 'atto/lib');
             $this->files['lib.php']->set_attribute('has_strings_for_js');
 
             foreach ($this->recipe['atto_features']['strings_for_js'] as $langstring) {
-
                 if (empty($langstring['id'])) {
                     $this->logger->warning('String id not set');
                     continue;
                 }
 
                 if (empty($langstring['text'])) {
-                    $this->logger->warning("Text for string '".$langstring['id']."' not set");
+                    $this->logger->warning("Text for string '" . $langstring['id'] . "' not set");
                     continue;
                 }
 
@@ -813,7 +813,6 @@ class manager {
         }
 
         if ($this->has_component_feature('params_for_js')) {
-
             if (empty($this->files['lib.php'])) {
                 $this->prepare_file_skeleton('lib.php', 'lib_php_file', 'atto/lib');
             }
@@ -838,11 +837,11 @@ class manager {
         $this->prepare_file_skeleton($pluginfofile, 'php_single_file', 'tiny/plugininfo_php');
 
         $commandsjsfile = 'amd/src/commands.js';
-        $addcommandsfile = function() use ($commandsjsfile) {
+        $addcommandsfile = function () use ($commandsjsfile) {
             $this->prepare_file_skeleton($commandsjsfile, 'base', 'tiny/commands_js');
         };
         $configjsfile = 'amd/src/configuration.js';
-        $addconfigfile = function() use ($configjsfile) {
+        $addconfigfile = function () use ($configjsfile) {
             $this->prepare_file_skeleton($configjsfile, 'base', 'tiny/configuration_js');
         };
 
@@ -852,13 +851,13 @@ class manager {
             $optionsjsfile = 'amd/src/options.js';
             $this->prepare_file_skeleton($optionsjsfile, 'base', 'tiny/options_js');
 
-            $options = array_map(function($value) {
+            $options = array_map(function ($value) {
                 $value['ucname'] = ucfirst($value['name']);
 
                 return $value;
             }, $this->recipe['tiny_features']['options']);
 
-            $options = array_filter($options, function($value): bool {
+            $options = array_filter($options, function ($value): bool {
                 return !empty($value['ucname']);
             });
 
@@ -916,7 +915,6 @@ class manager {
                     'commandName' => $button['buttonName'],
                     'name' => $button['name'],
                 ];
-
             }
 
             $this->files[$commandsjsfile]->set_attribute('buttons', $buttons);
@@ -926,7 +924,7 @@ class manager {
             foreach ($buttonsbycategory as $category => $buttonlist) {
                 $buttoncategories = [
                     'category' => $category,
-                    'buttons' => array_map(function($button): string {
+                    'buttons' => array_map(function ($button): string {
                         return $button['buttonName'];
                     }, $buttonlist),
                 ];
@@ -987,7 +985,7 @@ class manager {
             foreach ($menuitemsbycategory as $category => $menuitemlist) {
                 $menuitemcategories = [
                     'category' => $category,
-                    'menuitems' => array_map(function($menuitem): string {
+                    'menuitems' => array_map(function ($menuitem): string {
                         return $menuitem['menuItemName'];
                     }, $menuitemlist),
                 ];
@@ -1025,7 +1023,7 @@ class manager {
 
         foreach ($enrolfeatures as $enrolfeature) {
             if ($this->has_component_feature($enrolfeature)) {
-                $this->files['lib.php']->set_attribute('has_'.$enrolfeature);
+                $this->files['lib.php']->set_attribute('has_' . $enrolfeature);
             }
         }
 
@@ -1093,18 +1091,18 @@ class manager {
             }
         }
 
-        $this->prepare_file_skeleton($this->recipe['component'].'.php', 'php_single_file', 'block/block', $blockrecipe);
+        $this->prepare_file_skeleton($this->recipe['component'] . '.php', 'php_single_file', 'block/block', $blockrecipe);
 
         if ($this->has_component_feature('edit_form')) {
             $this->prepare_file_skeleton('edit_form.php', 'php_single_file', 'block/edit_form');
         }
 
         if ($this->has_component_feature('instance_allow_multiple')) {
-            $this->files[$this->recipe['component'].'.php']->set_attribute('has_instance_allow_multiple');
+            $this->files[$this->recipe['component'] . '.php']->set_attribute('has_instance_allow_multiple');
         }
 
         if ($this->has_common_feature('settings')) {
-            $this->files[$this->recipe['component'].'.php']->set_attribute('has_config');
+            $this->files[$this->recipe['component'] . '.php']->set_attribute('has_config');
         }
 
         if ($this->has_component_feature('backup_moodle2')) {
@@ -1122,29 +1120,29 @@ class manager {
         $hasbackupstepslib = $this->has_component_feature('backup_stepslib');
         $hasrestorestepslib = $this->has_component_feature('restore_stepslib');
 
-        $backuptaskfile = 'backup/moodle2/backup_'.$componentname.'_block_task.class.php';
+        $backuptaskfile = 'backup/moodle2/backup_' . $componentname . '_block_task.class.php';
         $this->prepare_file_skeleton($backuptaskfile, 'php_single_file', 'block/backup/moodle2/backup_block_task_class')
             ->set_attribute('has_extra_requirements');
 
         if ($hassettingslib) {
-            $settingslibfile = 'backup/moodle2/backup_'.$componentname.'_settingslib.php';
+            $settingslibfile = 'backup/moodle2/backup_' . $componentname . '_settingslib.php';
             $this->prepare_file_skeleton($settingslibfile, 'php_single_file', 'block/backup/moodle2/backup_settingslib');
             $this->files[$backuptaskfile]->set_attribute('has_settingslib');
         }
 
         if ($hasbackupstepslib) {
-            $stepslibfile = 'backup/moodle2/backup_'.$componentname.'_stepslib.php';
+            $stepslibfile = 'backup/moodle2/backup_' . $componentname . '_stepslib.php';
             $this->prepare_file_skeleton($stepslibfile, 'php_single_file', 'block/backup/moodle2/backup_stepslib');
             $this->files[$backuptaskfile]->set_attribute('has_stepslib');
         }
 
         if ($this->has_component_feature('restore_task')) {
-            $restoretaskfile = 'backup/moodle2/restore_'.$componentname.'_block_task.class.php';
+            $restoretaskfile = 'backup/moodle2/restore_' . $componentname . '_block_task.class.php';
             $this->prepare_file_skeleton($restoretaskfile, 'php_single_file', 'block/backup/moodle2/restore_block_task_class')
                 ->set_attribute('has_extra_requirements');
 
             if ($hasrestorestepslib) {
-                $stepslibfile = 'backup/moodle2/restore_'.$componentname.'_stepslib.php';
+                $stepslibfile = 'backup/moodle2/restore_' . $componentname . '_stepslib.php';
                 $this->prepare_file_skeleton($stepslibfile, 'php_single_file', 'block/backup/moodle2/restore_stepslib');
                 $this->files[$restoretaskfile]->set_attribute('has_stepslib');
             }
@@ -1179,7 +1177,7 @@ class manager {
             $this->files['config.php']->set_attribute('has_stylesheets');
 
             foreach ($this->recipe['theme_features']['stylesheets'] as $stylesheet) {
-                $this->prepare_file_skeleton('styles/'.$stylesheet['name'].'.css', 'base', 'theme/stylesheet');
+                $this->prepare_file_skeleton('styles/' . $stylesheet['name'] . '.css', 'base', 'theme/stylesheet');
             }
         }
 
@@ -1189,7 +1187,7 @@ class manager {
 
         if ($this->has_component_feature('custom_layouts')) {
             foreach ($this->recipe['theme_features']['custom_layouts'] as $layout) {
-                $layoutfile = 'layout/'.$layout['name'].'.php';
+                $layoutfile = 'layout/' . $layout['name'] . '.php';
                 $this->prepare_file_skeleton($layoutfile, 'base', 'theme/layout');
 
                 if ($ishtml5) {
@@ -1217,7 +1215,7 @@ class manager {
         $this->prepare_file_skeleton('questiontype.php', 'php_internal_file', 'qtype/questiontype');
         $this->prepare_file_skeleton('classes/output/renderer.php', 'php_internal_file', 'qtype/renderer');
 
-        $editform = 'edit_'.$this->recipe['component_name'].'_form.php';
+        $editform = 'edit_' . $this->recipe['component_name'] . '_form.php';
         $this->prepare_file_skeleton($editform, 'php_internal_file', 'qtype/edit_form');
     }
 
@@ -1304,7 +1302,6 @@ class manager {
         $this->prepare_file_skeleton('db/install.xml', 'db_install_xml_file', 'mod/db_install_xml');
 
         if ($this->has_component_feature('gradebook')) {
-
             $gradebookfunctions = [
                 'scale_used',
                 'scale_used_anywhere',
@@ -1314,7 +1311,7 @@ class manager {
             ];
 
             foreach ($gradebookfunctions as $gradebookfunction) {
-                $this->files['lib.php']->set_attribute('has_'.$gradebookfunction);
+                $this->files['lib.php']->set_attribute('has_' . $gradebookfunction);
             }
 
             $this->files['lib.php']->add_supported_feature('FEATURE_GRADE_HAS_GRADE');
@@ -1324,7 +1321,6 @@ class manager {
         }
 
         if ($this->has_component_feature('file_area')) {
-
             $fileareafunctions = [
                 'get_file_areas',
                 'get_file_info',
@@ -1332,9 +1328,8 @@ class manager {
             ];
 
             foreach ($fileareafunctions as $fileareafunction) {
-                $this->files['lib.php']->set_attribute('has_'.$fileareafunction);
+                $this->files['lib.php']->set_attribute('has_' . $fileareafunction);
             }
-
         }
 
         $this->files['lib.php']->add_supported_feature('FEATURE_MOD_INTRO');
@@ -1434,7 +1429,8 @@ class manager {
             $this->prepare_file_skeleton(
                 'templates/local/content/section.mustache',
                 'base',
-                'format/templates/local/content/section');
+                'format/templates/local/content/section'
+            );
             $this->prepare_file_skeleton(
                 'templates/local/content/section/cmitem.mustache',
                 'base',
@@ -1466,25 +1462,40 @@ class manager {
         $componentname = $this->recipe['component_name'];
         $hassettingslib = $this->has_component_feature('settingslib');
 
-        $this->prepare_file_skeleton('backup/moodle2/backup_'.$componentname.'_activity_task.class.php',
-                                     'backup_activity_task_file', 'mod/backup/moodle2/backup_activity_task_class');
+        $this->prepare_file_skeleton(
+            'backup/moodle2/backup_' . $componentname . '_activity_task.class.php',
+            'backup_activity_task_file',
+            'mod/backup/moodle2/backup_activity_task_class'
+        );
         if ($hassettingslib) {
-            $this->files['backup/moodle2/backup_'.$componentname.'_activity_task.class.php']->set_attribute('has_settingslib');
+            $this->files['backup/moodle2/backup_' . $componentname . '_activity_task.class.php']->set_attribute('has_settingslib');
         }
 
-        $this->prepare_file_skeleton('backup/moodle2/backup_'.$componentname.'_stepslib.php', 'php_single_file',
-                                     'mod/backup/moodle2/backup_stepslib');
+        $this->prepare_file_skeleton(
+            'backup/moodle2/backup_' . $componentname . '_stepslib.php',
+            'php_single_file',
+            'mod/backup/moodle2/backup_stepslib'
+        );
 
         if ($hassettingslib) {
-            $this->prepare_file_skeleton('backup/moodle2/backup_'.$componentname.'_settingslib.php', 'php_single_file',
-                                         'mod/backup/moodle2/backup_settingslib');
+            $this->prepare_file_skeleton(
+                'backup/moodle2/backup_' . $componentname . '_settingslib.php',
+                'php_single_file',
+                'mod/backup/moodle2/backup_settingslib'
+            );
         }
 
-        $this->prepare_file_skeleton('backup/moodle2/restore_'.$componentname.'_activity_task.class.php', 'php_single_file',
-            'mod/backup/moodle2/restore_activity_task_class')->set_attribute('has_extra_requirements');
+        $this->prepare_file_skeleton(
+            'backup/moodle2/restore_' . $componentname . '_activity_task.class.php',
+            'php_single_file',
+            'mod/backup/moodle2/restore_activity_task_class'
+        )->set_attribute('has_extra_requirements');
 
-        $this->prepare_file_skeleton('backup/moodle2/restore_'.$componentname.'_stepslib.php', 'php_single_file',
-                                     'mod/backup/moodle2/restore_stepslib');
+        $this->prepare_file_skeleton(
+            'backup/moodle2/restore_' . $componentname . '_stepslib.php',
+            'php_single_file',
+            'mod/backup/moodle2/restore_stepslib'
+        );
     }
 
     /**
@@ -1508,25 +1519,24 @@ class manager {
 
             // Adding observer class.
             if ($isclass !== false) {
-
                 $isinsidenamespace = strpos($observer['callback'], '\\');
                 if ($isinsidenamespace !== false) {
                     $observernamespace = explode('\\', $observer['callback']);
                     $namecallback = end($observernamespace);
 
-                    list($observername, $callback) = explode('::', $namecallback);
+                    [$observername, $callback] = explode('::', $namecallback);
 
                     $namespace = substr($observer['callback'], 0, strrpos($observer['callback'], '\\'));
                     $namespace = trim($namespace, '\\');
                 } else {
-                    list($observername, $callback) = explode('::', $observer['callback']);
+                    [$observername, $callback] = explode('::', $observer['callback']);
                 }
 
                 if ($isinsidenamespace !== false && (strpos($observername, $this->recipe['component']) !== false)) {
-                    $observername = substr($observername, strlen($this->recipe['component'].'_'));
+                    $observername = substr($observername, strlen($this->recipe['component'] . '_'));
                 }
 
-                $observerfile = 'classes/'.$observername.'.php';
+                $observerfile = 'classes/' . $observername . '.php';
 
                 if (empty($this->files[$observerfile])) {
                     $this->prepare_file_skeleton($observerfile, 'observer_file', 'classes_observer', $observerrecipe);
@@ -1539,7 +1549,6 @@ class manager {
                     $this->files[$observerfile]->set_file_namespace($namespace);
                 }
             } else {
-
                 // Functions specific to the plugin are defined in the locallib.php file.
                 if (empty($this->files['locallib.php'])) {
                     $this->prepare_file_skeleton('locallib.php', 'locallib_php_file', 'locallib');
@@ -1567,7 +1576,7 @@ class manager {
                 $eventrecipe['event']['extends'] = '\core\event\base';
             }
 
-            $eventfile = 'classes/event/'.$eventrecipe['event']['eventname'].'.php';
+            $eventfile = 'classes/event/' . $eventrecipe['event']['eventname'] . '.php';
             $this->prepare_file_skeleton($eventfile, 'php_single_file', 'classes_event_event', $eventrecipe);
         }
     }
@@ -1578,7 +1587,7 @@ class manager {
     protected function prepare_cli_files() {
 
         foreach ($this->recipe['cli_scripts'] as $script) {
-            $this->prepare_file_skeleton('cli/'.$script['filename'].'.php', 'php_cli_file', 'cli');
+            $this->prepare_file_skeleton('cli/' . $script['filename'] . '.php', 'php_cli_file', 'cli');
         }
     }
 
@@ -1607,17 +1616,19 @@ class manager {
     protected function prepare_file_skeleton($filename, $skeltype, $template, $recipe = null): \tool_pluginskel\local\skel\base {
 
         if (strpos($template, 'file/') !== 0) {
-            $template = 'file/'.$template;
+            $template = 'file/' . $template;
         }
 
-        $this->logger->debug('Preparing file skeleton:',
-                             ['filename' => $filename, 'skeltype' => $skeltype, 'template' => $template]);
+        $this->logger->debug(
+            'Preparing file skeleton:',
+            ['filename' => $filename, 'skeltype' => $skeltype, 'template' => $template]
+        );
 
         if (isset($this->files[$filename])) {
-            throw new exception('The file has already been initialised: '.$filename);
+            throw new exception('The file has already been initialised: ' . $filename);
         }
 
-        $skelclass = '\\tool_pluginskel\\local\\skel\\'.$skeltype;
+        $skelclass = '\\tool_pluginskel\\local\\skel\\' . $skeltype;
 
         $skel = new $skelclass();
         $skel->set_template($template);
@@ -1633,10 +1644,10 @@ class manager {
 
         // Populate some additional properties.
         $data['self']['filename'] = $filename;
-        $data['self']['relpath'] = $data['component_root'].'/'.$data['component_name'].'/'.$filename;
+        $data['self']['relpath'] = $data['component_root'] . '/' . $data['component_name'] . '/' . $filename;
         $depth = substr_count($data['self']['relpath'], '/');
-        $data['self']['pathtoconfig'] = "__DIR__ . '/".str_repeat('../', $depth - 1)."config.php'";
-        $data['component_type_is_'.$data['component_type']] = true;
+        $data['self']['pathtoconfig'] = "__DIR__ . '/" . str_repeat('../', $depth - 1) . "config.php'";
+        $data['component_type_is_' . $data['component_type']] = true;
 
         $skel->set_data($data);
 
@@ -1653,7 +1664,7 @@ class manager {
      */
     protected function has_component_feature($feature) {
 
-        $componentfeatures = $this->recipe['component_type'].'_features';
+        $componentfeatures = $this->recipe['component_type'] . '_features';
 
         if ($feature === 'settingslib') {
             $hasbackup = $this->has_component_feature('backup_moodle2');
@@ -1803,7 +1814,7 @@ class manager {
 
         // Validate the component and set component_type, component_name and component_root.
 
-        list($type, $name) = core_component::normalize_component($this->recipe['component']);
+        [$type, $name] = core_component::normalize_component($this->recipe['component']);
 
         if ($type === 'core') {
             throw new exception('Core subsystems components not supported');
@@ -1824,7 +1835,7 @@ class manager {
                 // Removed in Moodle 5.0. Needs to be manually installed as an add-on.
                 $plugintypes['atto'] = $CFG->dirroot . '/lib/editor/atto/plugins';
             } else {
-                throw new exception('Unknown plugin type: '.$type);
+                throw new exception('Unknown plugin type: ' . $type);
             }
         }
 

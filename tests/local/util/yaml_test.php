@@ -25,7 +25,6 @@ namespace tool_pluginskel\local\util;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class yaml_test extends \basic_testcase {
-
     public function test_yaml_processing(): void {
 
         $input = "---

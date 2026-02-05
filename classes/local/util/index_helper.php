@@ -35,7 +35,6 @@ use Monolog\Handler\BrowserConsoleHandler;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class index_helper {
-
     /**
      * Returns the number of values for each variable array by examining the recipe.
      *
@@ -50,7 +49,6 @@ class index_helper {
 
         foreach ($templatevars as $variable) {
             if ($variable['type'] == 'numeric-array') {
-
                 $variablename = $variable['name'];
 
                 if (empty($recipe[$variablename])) {
@@ -62,9 +60,9 @@ class index_helper {
                 }
 
                 if (empty($countprefix)) {
-                    $countname = $variablename.'count';
+                    $countname = $variablename . 'count';
                 } else {
-                    $countname = $countprefix.'_'.$variablename.'count';
+                    $countname = $countprefix . '_' . $variablename . 'count';
                 }
 
                 $variablecount[$countname] = $count;
@@ -76,34 +74,39 @@ class index_helper {
                 foreach ($variable['values'] as $nestedvariable) {
                     if ($nestedvariable['type'] == 'numeric-array') {
                         for ($i = 0; $i < $count; $i += 1) {
-                            $nestedvariablecount = self::get_array_variable_count_from_recipe($variable['values'],
-                                                                                              $recipevalues[$i],
-                                                                                              $countprefix);
+                            $nestedvariablecount = self::get_array_variable_count_from_recipe(
+                                $variable['values'],
+                                $recipevalues[$i],
+                                $countprefix
+                            );
+
+                            $nestedvariablekey = $nestedvariable['name'] . 'count';
+
                             if (empty($countprefix)) {
-                                $nestedcountname = $variablename.'_'.$i.'_'.$nestedvariable['name'].'count';
+                                $nestedcountname = $variablename . '_' . $i . '_' . $nestedvariablekey;
                             } else {
-                                $nestedcountname = $countprefix.'_'.$variablename.'_'.$i.'_'.$nestedvariable['name'].'count';
+                                $nestedcountname = $countprefix . '_' . $variablename . '_' . $i . '_' . $nestedvariablekey;
                             }
-                            $variablecount[$nestedcountname] = $nestedvariablecount[$nestedvariable['name'].'count'];
+                            $variablecount[$nestedcountname] = $nestedvariablecount[$namecount];
                         }
                     }
                 }
-
             } else if ($variable['type'] === 'associative-array') {
                 // Associative arrays can have nested numerically indexed array variables.
                 foreach ($variable['values'] as $nestedvariable) {
                     if ($nestedvariable['type'] === 'numeric-array') {
-
                         if (empty($recipe[$variable['name']][$nestedvariable['name']])) {
                             $count = 1;
                         } else {
                             $count = count($recipe[$variable['name']][$nestedvariable['name']]);
                         }
 
+                        $nestedvariablekey = $nestedvariable['name'] . 'count';
+
                         if (empty($countprefix)) {
-                            $countname = $variable['name'].'_'.$nestedvariable['name'].'count';
+                            $countname = $variable['name'] . '_' . $nestedvariablekey;
                         } else {
-                            $countname = $countprefix.'_'.$variable['name'].'_'.$nestedvariable['name'].'count';
+                            $countname = $countprefix . '_' . $variable['name'] . '_' . $nestedvariablekey;
                         }
                         $variablecount[$countname] = $count;
                     }
@@ -127,13 +130,12 @@ class index_helper {
 
         foreach ($templatevars as $variable) {
             if ($variable['type'] === 'numeric-array') {
-
                 $variablename = $variable['name'];
 
                 if (empty($countprefix)) {
-                    $countname = $variablename.'count';
+                    $countname = $variablename . 'count';
                 } else {
-                    $countname = $countprefix.'_'.$variablename.'count';
+                    $countname = $countprefix . '_' . $variablename . 'count';
                 }
 
                 $count = (int) optional_param($countname, 1, PARAM_INT);
@@ -141,12 +143,13 @@ class index_helper {
 
                 foreach ($variable['values'] as $nestedvariable) {
                     if ($nestedvariable['type'] === 'numeric-array') {
-                        for ($i = 0; $i < $count; $i += 1) {
+                        $nestedvariablekey = $nestedvariable['name'] . 'count';
 
+                        for ($i = 0; $i < $count; $i += 1) {
                             if (empty($parentname)) {
-                                $nestedcountname = $variablename.'_'.$i.'_'.$nestedvariable['name'].'count';
+                                $nestedcountname = $variablename . '_' . $i . '_' . $nestedvariablekey;
                             } else {
-                                $nestedcountname = $countprefix.'_'.$variablename.'_'.$i.'_'.$nestedvariable['name'].'count';
+                                $nestedcountname = $countprefix . '_' . $variablename . '_' . $i . '_' . $nestedvariablekey;
                             }
 
                             $count = (int) optional_param($nestedcountname, 1, PARAM_INT);
@@ -154,15 +157,15 @@ class index_helper {
                         }
                     }
                 }
-
             } else if ($variable['type'] === 'associative-array') {
                 foreach ($variable['values'] as $nestedvariable) {
                     if ($nestedvariable['type'] === 'numeric-array') {
+                        $nestedvariablekey = $nestedvariable['name'] . 'count';
 
                         if (empty($countprefix)) {
-                            $countname = $variable['name'].'_'.$nestedvariable['name'].'count';
+                            $countname = $variable['name'] . '_' . $nestedvariablekey;
                         } else {
-                            $countname = $countprefix.'_'.$variable['name'].'_'.$nestedvariable['name'].'count';
+                            $countname = $countprefix . '_' . $variable['name'] . '_' . $nestedvariablekey;
                         }
 
                         $count = (int) optional_param($countname, 1, PARAM_INT);
@@ -185,11 +188,11 @@ class index_helper {
     public static function generate_download_header($filename, $contentlength) {
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        header('Content-Length: '.$contentlength);
+        header('Content-Length: ' . $contentlength);
     }
 
     /**
@@ -199,7 +202,7 @@ class index_helper {
      */
     public static function download_recipe($recipestring) {
 
-        $filename = 'recipe_'.time().'.yaml';
+        $filename = 'recipe_' . time() . '.yaml';
         $contentlength = strlen($recipestring);
 
         self::generate_download_header($filename, $contentlength);
@@ -221,20 +224,20 @@ class index_helper {
         $manager->make();
 
         $tempdir = make_request_directory();
-        $targetdir = $tempdir.'/src';
+        $targetdir = $tempdir . '/src';
         $manager->write_files($targetdir);
 
         $generatedfiles = $manager->get_files_content();
 
         $component = $recipe['component'];
-        list($componenttype, $componentname) = \core_component::normalize_component($component);
+        [$componenttype, $componentname] = \core_component::normalize_component($component);
         $zipfiles = [];
         foreach ($generatedfiles as $filename => $notused) {
-            $zipfiles[$componentname.'/'.$filename] = $targetdir.'/'.$filename;
+            $zipfiles[$componentname . '/' . $filename] = $targetdir . '/' . $filename;
         }
 
         $packer = get_file_packer('application/zip');
-        $archivefile = $tempdir.'/'.$component.'_'.time().'.zip';
+        $archivefile = $tempdir . '/' . $component . '_' . time() . '.zip';
         $packer->archive_to_pathname($zipfiles, $archivefile);
 
         $filename = basename($archivefile);

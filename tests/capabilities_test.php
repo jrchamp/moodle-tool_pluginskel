@@ -43,7 +43,6 @@ require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/pluginskel/vendor/autolo
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class capabilities_test extends \advanced_testcase {
-
     /** @var string[] The test recipe. */
     protected static $recipe = [
         'component' => 'local_capabilitiestest',
@@ -73,7 +72,7 @@ final class capabilities_test extends \advanced_testcase {
      */
     public static function setUpBeforeClass(): void {
         parent::setUpBeforeClass();
-        list($type, $name) = \core_component::normalize_component(self::$recipe['component']);
+        [$type, $name] = \core_component::normalize_component(self::$recipe['component']);
         self::$plugintype = $type;
     }
 
@@ -101,14 +100,14 @@ final class capabilities_test extends \advanced_testcase {
         $this->assertStringContainsString($moodleinternal, $dbaccessfile);
 
         // Verify if the title string has been generated.
-        $this->assertArrayHasKey('lang/en/'.$recipe['component'].'.php', $files);
-        $langfile = $files['lang/en/'.$recipe['component'].'.php'];
+        $this->assertArrayHasKey('lang/en/' . $recipe['component'] . '.php', $files);
+        $langfile = $files['lang/en/' . $recipe['component'] . '.php'];
 
-        $langstring = "\$string['capabilitiestest:view'] = '".$recipe['capabilities'][0]['title']."';";
+        $langstring = "\$string['capabilitiestest:view'] = '" . $recipe['capabilities'][0]['title'] . "';";
         $this->assertStringContainsString($langstring, $langfile);
 
         // Verify if the capability has been generated correctly.
-        $this->assertStringContainsString(self::$plugintype.'/capabilitiestest:view', $dbaccessfile);
+        $this->assertStringContainsString(self::$plugintype . '/capabilitiestest:view', $dbaccessfile);
         $this->assertStringContainsString("'riskbitmask' => RISK_XSS", $dbaccessfile);
         $this->assertStringContainsString("'captype' => 'view'", $dbaccessfile);
         $this->assertStringContainsString("'contextlevel' => CONTEXT_MODULE", $dbaccessfile);
@@ -133,7 +132,7 @@ final class capabilities_test extends \advanced_testcase {
         $dbaccessfile = $files['db/access.php'];
 
         // Verify if all the capabilities have been generated.
-        $this->assertStringContainsString(self::$plugintype.'/capabilitiestest:view', $dbaccessfile);
-        $this->assertStringContainsString(self::$plugintype.'/capabilitiestest:edit', $dbaccessfile);
+        $this->assertStringContainsString(self::$plugintype . '/capabilitiestest:view', $dbaccessfile);
+        $this->assertStringContainsString(self::$plugintype . '/capabilitiestest:edit', $dbaccessfile);
     }
 }

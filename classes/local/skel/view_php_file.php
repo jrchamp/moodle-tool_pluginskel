@@ -34,7 +34,6 @@ use tool_pluginskel\local\util\exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class view_php_file extends php_web_file {
-
     /**
      * Set the data to be eventually rendered.
      *

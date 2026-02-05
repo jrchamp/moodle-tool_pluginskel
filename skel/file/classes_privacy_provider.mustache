@@ -182,7 +182,7 @@ class provider implements{{{ privacy._implementedinterfaces }}} {
             return;
         }
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $user = $contextlist->get_user();
         $fs = get_file_storage();
 

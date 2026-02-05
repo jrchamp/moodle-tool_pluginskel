@@ -80,10 +80,14 @@ class provider implements{{{ privacy._implementedinterfaces }}} {
     public static function {{# privacy.uselegacypolyfill }}_{{/ privacy.uselegacypolyfill }}get_metadata(collection $collection){{^ privacy.uselegacypolyfill }}: collection{{/ privacy.uselegacypolyfill }} {
 
 {{# privacy._metadbfields }}
-        $collection->add_database_table('{{ name }}', [
-{{# fields }}           '{{ name }}' => '{{ stringid }}',
+        $collection->add_database_table(
+            '{{ name }}',
+            [
+{{# fields }}                '{{ name }}' => '{{ stringid }}',
 {{/ fields }}
-        ], '{{ stringid }}');
+            ],
+            '{{ stringid }}'
+        );
 
 {{/ privacy._metadbfields }}
 
@@ -96,10 +100,14 @@ class provider implements{{{ privacy._implementedinterfaces }}} {
         $collection->add_subsystem_link('core_{{ name }}', [], '{{ stringid }}');
 {{/ hasfields }}
 {{# hasfields }}
-        $collection->add_subsystem_link('core_{{ name }}', [
-{{# fields }}           '{{ name }}' => '{{ stringid }}',
+        $collection->add_subsystem_link(
+            'core_{{ name }}',
+            [
+{{# fields }}                '{{ name }}' => '{{ stringid }}',
 {{/ fields }}
-        ], '{{ stringid }}');
+            ],
+            '{{ stringid }}'
+        );
 {{/ hasfields }}
 {{/ privacy._metasubsystems }}
 
@@ -108,10 +116,14 @@ class provider implements{{{ privacy._implementedinterfaces }}} {
         $collection->add_external_location_link('{{ name }}', [], '{{ stringid }}');
 {{/ hasfields }}
 {{# hasfields }}
-        $collection->add_external_location_link('{{ name }}', [
-{{# fields }}           '{{ name }}' => '{{ stringid }}',
+        $collection->add_external_location_link(
+            '{{ name }}',
+            [
+{{# fields }}                '{{ name }}' => '{{ stringid }}',
 {{/ fields }}
-        ], '{{ stringid }}');
+            ],
+            '{{ stringid }}'
+        );
 {{/ hasfields }}
 {{/ privacy._metaexternal }}
 
@@ -202,8 +214,12 @@ class provider implements{{{ privacy._implementedinterfaces }}} {
         ${{ shortname }} = get_user_preferences('{{ name }}', null, $userid);
 
         if (${{ shortname }} !== null) {
-            writer::export_user_preference('{{ component }}', '{{ name }}', ${{ shortname }},
-                get_string('{{ stringid }}', '{{ component }}'));
+            writer::export_user_preference(
+                '{{ component }}',
+                '{{ name }}',
+                ${{ shortname }},
+                get_string('{{ stringid }}', '{{ component }}')
+            );
         }
 {{/ privacy._metauserpreferences }}
     }
